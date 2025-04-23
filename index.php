@@ -310,7 +310,7 @@
         }
 
         function checkModule() {
-           var searchParams = new URLSearchParams(window.location.search);
+            var searchParams = new URLSearchParams(window.location.search);
             searchParams.has('module') // true
             var param = searchParams.get('module')
             console.log(param);
@@ -322,7 +322,7 @@
         }
 
         function renderPage(param) {
-            //$('.loader').show();
+            $('.loader').show();
             $("li a").removeClass( "active" );
             if(!username && !$.cookie('_ms_email', username)) {
                 location.href = "https://aims-muda.cpoc.com.my:444/";
