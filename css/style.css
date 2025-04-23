@@ -665,6 +665,15 @@ textarea {
 .rbi-lightgray {
     background-color: lightgray;
 }
+.rbi-span-2 {
+    grid-column: span 2;
+}
+.rbi-span-3 {
+    grid-column: span 3;
+}
+.rbi-span-4 {
+    grid-column: span 4;
+}
 .rbi-span-5 {
     grid-column: span 5;
 }

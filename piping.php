@@ -393,6 +393,27 @@
                 </button>
             </div>
             <div class="modal-body">
+
+                <div class="rbi-grid">
+                    <div class="rbi-item rbi-span-10 rbi-lightgray">POF | PROBABILITY OF FAILURE</div>
+                    <div class="rbi-item rbi-span-3 rbi-extra-lightgray">Damage Mechanism</div>
+                    <div class="rbi-item rbi-span-3 rbi-extra-lightgray">Probability of Failure Level</div>
+                    <div class="rbi-item rbi-span-4 rbi-extra-lightgray">Comment</div>
+
+                    <div class="rbi-item rbi-span-10 rbi-lightgray">COF | CONSEQUENCE OF FAILURE</div>
+                    <div class="rbi-item rbi-span-2 rbi-extra-lightgray">Consequence</div>
+                    <div class="rbi-item rbi-span-4 rbi-extra-lightgray">Consequence of Failure Level</div>
+                    <div class="rbi-item rbi-span-4 rbi-extra-lightgray">Comment</div>
+
+                    <!-- People -->
+                    <div class="rbi-item rbi-span-2 rbi-extra-lightgray">People</div>
+                    <div class="rbi-item rbi-span-4"></div>
+                    <div class="rbi-item rbi-span-4"></div>
+
+                    <!-- Asset / Production -->
+
+                </div>
+
                 <div class="rbi-grid">
                     <div class="rbi-item rbi-span-5 rbi-row-span-2 rbi-lightgray">CoF</div>
                     <div class="rbi-item rbi-span-5 rbi-lightgray">PoF</div>
@@ -1104,6 +1125,30 @@
     function call_modal_rbi(o) {
         console.log(o.data.fieldData.risk_level);
         console.log(o.data.fieldData.rbi_recommendation);
+        $.ajax({
+            type: "GET",
+            url: "https://" + url_api + "/fmi/data/v2/databases/Piping/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_line,
+            dataType: 'json',
+            headers: {
+                "Authorization": "Bearer " + _token_piping,
+                "Content-Type": "application/json"
+            },
+            async: false,
+            success: function (data) {
+                console.log('rbi_data', JSON.parse(data.response.scriptResult));
+            },
+            error: function (error) {
+                console.log(error);
+                console.log(error.responseJSON.messages[0].code);
+                if(error.responseJSON.messages[0].code == 401) {
+                    // no record match
+                } else {
+                    get_token_piping();
+                    _token_piping = $.cookie("_token_piping");
+                    call_modal_rbi(o);
+                }
+            }
+        });
         $('#rbi_modal').modal('show');
         if(riskLvId) {
             $('#' + riskLvId).html("");
