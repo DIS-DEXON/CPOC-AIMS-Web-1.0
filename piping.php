@@ -392,52 +392,6 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-info">
-                <table class="table table-bordered table-striped table-hover">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th colspan="3" class="text-center">POF</th>
-                    </tr>
-                    <tr>
-                        <th>Damage</th>
-                        <th>Prop</th>
-                        <th>Comment</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td><span class="text-p-number text-black" id="DM1">External Corrosion</span></td>
-                        <td><span class="text-p-number text-black" id="P1">Rare (A) | Never heard in E&P industry but counld occur</span></td>
-                        <td><span class="text-p-number text-black" id="C1">This DM is assigned with Estimated CR (Expert CR) of 0.025 mm/yr</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="text-p-number text-black" id="DM2">Atmospheric Corrosion</span></td>
-                        <td><span class="text-p-number text-black" id="P2">Rare (A) | Never heard in E&P industry but counld occur</span></td>
-                        <td><span class="text-p-number text-black" id="C2">This DM is assigned with corrrosion rate of 0.254 mm/yr.</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="text-p-number text-black" id="DM3">Vibration-Induced Fatigue</span></td>
-                        <td><span class="text-p-number text-black" id="P3">Rare (A) | Never heard in E&P industry but counld occur</span></td>
-                        <td><span class="text-p-number text-black" id="C3"></span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="text-p-number text-black" id="DM4">4</span></td>
-                        <td><span class="text-p-number text-black" id="P4">4</span></td>
-                        <td><span class="text-p-number text-black" id="C4">4</span></td>
-                    </tr>
-                    <tr>
-                        <td><span class="text-p-number text-black" id="DM5">5</span></td>
-                        <td><span class="text-p-number text-black" id="P5">5</span></td>
-                        <td><span class="text-p-number text-black" id="C5">5</span></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <!-- <div class="rbi-item rbi-span-5 rbi-row-span-2 rbi-lightgray">CoF</div>
-                <div class="rbi-item rbi-extra-lightgray">C<br>Possible</div>
-                <div class="rbi-item rbi-extra-lightgray">D<br>Likely</div>
-                <div class="rbi-item rbi-extra-lightgray">E<br>Almost Certain</div> -->
-            </div>
-
             <div class="modal-body">
 
                 <div class="rbi-grid">
@@ -636,7 +590,7 @@
     get_data();
     get_piping_summary();
     $('.loader').hide();
-    
+
     function get_data() {
         //console.log("in");
         $.ajax({
