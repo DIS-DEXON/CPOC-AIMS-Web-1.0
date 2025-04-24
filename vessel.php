@@ -392,19 +392,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="rbi-nav">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#shell" type="button" role="tab" aria-controls="home" aria-selected="true">Home</button>
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
-                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div> -->
-                <!-- </div> -->
+                <div class="rbi-nav"></div>
                 <div class="rbi-grid " id="rbi-container-POF"></div>
                 <div class="rbi-grid" id="rbi-container-COF"></div>
 
@@ -1407,6 +1395,7 @@
     function call_modal_rbi(o) {
         console.log(o.data.fieldData.risk_level);
         console.log(o.data.fieldData.rbi_recommendation);
+
         $.ajax({
             type: "GET",
             url: "https://" + url_api + "/fmi/data/v2/databases/Vessel/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_line,
