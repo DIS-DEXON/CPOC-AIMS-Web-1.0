@@ -392,6 +392,22 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="rbi-nav">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#shell" type="button" role="tab" aria-controls="home" aria-selected="true">Home</button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div> -->
+                <!-- </div> -->
+                <div class="rbi-grid " id="rbi-container-POF"></div>
+                <div class="rbi-grid" id="rbi-container-COF"></div>
+
                 <div class="rbi-grid">
                     <div class="rbi-item rbi-span-5 rbi-row-span-2 rbi-lightgray">CoF</div>
                     <div class="rbi-item rbi-span-5 rbi-lightgray">PoF</div>
@@ -1229,7 +1245,165 @@
         get_gen_doc(id_line);
         $('#library_modal').modal('show');
     }
+    function create_nav(rawData) {
+        var data = JSON.parse(rawData)
+        const componentDict = {};
+        
+        data.forEach(item => {
+            const comp = item.component;
+            if (!componentDict[comp]) {
+                componentDict[comp] = [];
+            }
+            componentDict[comp].push(item);
+        });
 
+        const navUl = document.querySelector("#myTab");
+        navUl.innerHTML = ""; 
+
+        let isFirst = true;
+        for (const component in componentDict) {
+            const li = document.createElement("li");
+            li.className = "nav-item";
+            li.setAttribute("role", "presentation");
+
+            const btn = document.createElement("button");
+            btn.className = "nav-link" + (isFirst ? " active" : "");
+            btn.id = `${component.toLowerCase()}-tab`;
+            btn.setAttribute("data-toggle", "tab");
+            btn.setAttribute("data-target", `#${component.toLowerCase()}`);
+            btn.setAttribute("type", "button");
+            btn.setAttribute("role", "tab");
+            btn.setAttribute("aria-controls", component.toLowerCase());
+            btn.setAttribute("aria-selected", isFirst ? "true" : "false");
+            btn.textContent = component;
+            btn.addEventListener("click", function () {
+                select_component(rawData, component);
+            });
+            li.appendChild(btn);
+            navUl.appendChild(li);
+
+            isFirst = false;
+        }
+    }
+
+    function select_component(rawData,component="shell"){
+        console.log(typeof rawData,component)
+        
+        const data = JSON.parse(rawData)
+        console.log(data,component)
+        const selectData = data.filter(item => item.component === component);
+        create_modal_rbi_table_POF(selectData);
+        create_modal_rbi_table_COF(selectData);
+    }
+    function create_modal_rbi_table_POF(parsedData) {
+        const containerPOF = document.getElementById("rbi-container-POF");
+        const prob_level_describe = {"A": "Never heard in E&P industry but could occur",
+                                     "B": "Event has occurred in the E&P industry or is unlikely to occur in CPOC",
+                                     "C": "Event occurred more than once in the E&P industry or has occurred in CPOC",
+                                     "D": "Event occurred several time per year in the E&P industry or once per year in CPOC",
+                                     "E": "Event occurred frequently in the E&P industry or occurred several times per year in CPOC"
+                                    };
+        const rbiData = parsedData[0] || {}; 
+        containerPOF.innerHTML = "";
+        console.log(rbiData)
+        const header1 = document.createElement("div");
+        header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
+        header1.textContent = "POF | PROBABILITY OF FAILURE";
+        containerPOF.appendChild(header1);
+
+        const header2 = document.createElement("div");
+        header2.className = "rbi-item-info-header rbi-span-3 rbi-purple border-inline-white";
+        header2.textContent = "Damage Mechanism";
+        containerPOF.appendChild(header2);
+
+        const header3 = document.createElement("div");
+        header3.className = "rbi-item-info-header rbi-span-3 rbi-purple border-inline-white";
+        header3.textContent = "Probability of Failure Level";
+        containerPOF.appendChild(header3);
+
+        const header4 = document.createElement("div");
+        header4.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
+        header4.textContent = "Comment";
+        containerPOF.appendChild(header4);
+
+        for (let i = 1; i <= 5; i++) {
+            const damage = rbiData[`PoF_damage_value_${i}`] ?? "";
+            const prop = rbiData[`PoF_value_${i}`] ?? "";
+            const comment = rbiData[`PoF_note_${i}`] ?? "";
+
+            const damageDiv = document.createElement("div");
+            damageDiv.className = "rbi-item-info-context rbi-span-3";
+            damageDiv.textContent = damage;
+
+            const propDiv = document.createElement("div");
+            propDiv.className = "rbi-item-info-context rbi-span-3";
+            propDiv.textContent = (prop != "") ? `Rare (${prop}) | ${prob_level_describe[prop]}` : " ";
+
+            const commentDiv = document.createElement("div");
+            commentDiv.className = "rbi-item-info-context rbi-span-4";
+            commentDiv.textContent = comment;
+
+            containerPOF.appendChild(damageDiv);
+            containerPOF.appendChild(propDiv);
+            containerPOF.appendChild(commentDiv);
+        }
+    }
+
+    function create_modal_rbi_table_COF(parsedData) {
+        const containerCOF = document.getElementById("rbi-container-COF");
+        const cof_list = ["people", "assets_production_loss", "environment", "reputation"];
+        const cof_title_list = ["People", "Assets / Production Loss", "Environment", "Reputation"];
+
+        const rbiData = parsedData[0] || {};
+        containerCOF.innerHTML = "";
+
+        const header1 = document.createElement("div");
+        header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
+        header1.textContent = "COF | CONSEQUENCE OF FAILURE";
+        containerCOF.appendChild(header1);
+
+        const header2 = document.createElement("div");
+        header2.className = "rbi-item-info-header rbi-span-2 rbi-purple border-inline-white";
+        header2.textContent = "Consequence";
+        containerCOF.appendChild(header2);
+
+        const header3 = document.createElement("div");
+        header3.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
+        header3.textContent = "Consequence of Failure Level";
+        containerCOF.appendChild(header3);
+
+        const header4 = document.createElement("div");
+        header4.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
+        header4.textContent = "Comment";
+        containerCOF.appendChild(header4);
+
+        for (let i =0; i <= 3; i++) {
+            const title = cof_title_list[i] ?? " ";
+            const value = rbiData[`CoF_${cof_list[i]}_value`] ?? " ";
+            const note = rbiData[`CoF_${cof_list[i]}_note`] ?? " ";
+            console.log(title)
+            console.log(value)
+            console.log(note)
+
+            const titleDiv = document.createElement("div");
+            titleDiv.className = "rbi-item-info-context rbi-span-2 rbi-extra-lightgray";
+            titleDiv.textContent = title;
+
+            const valueDiv = document.createElement("div");
+            valueDiv.className = "rbi-item-info-context rbi-span-4";
+            valueDiv.textContent = value;
+
+            const noteDiv = document.createElement("div");
+            noteDiv.className = "rbi-item-info-context rbi-span-4";
+            noteDiv.textContent = note;
+
+            containerCOF.appendChild(titleDiv);
+            containerCOF.appendChild(valueDiv);
+            containerCOF.appendChild(noteDiv);
+
+        }
+
+    }
     function call_modal_rbi(o) {
         console.log(o.data.fieldData.risk_level);
         console.log(o.data.fieldData.rbi_recommendation);
@@ -1244,8 +1418,9 @@
             async: false,
             success: function (data) {
                 console.log(JSON.parse(data.response.scriptResult))
-                // create_modal_rbi_table_POF(data.response.scriptResult);
-                // create_modal_rbi_table_COF(data.response.scriptResult);
+                create_nav(data.response.scriptResult)
+                create_modal_rbi_table_POF(JSON.parse(data.response.scriptResult));
+                create_modal_rbi_table_COF(JSON.parse(data.response.scriptResult));
             },
             error: function (error) {
                 console.log(error);
