@@ -397,7 +397,7 @@
                 <div class="rbi-grid " id="rbi-container-COF"></div>
                 <!-- <div class="rbi-grid" id="rbi-container"></div> -->
                 <div class="rbi-grid">
-
+                    <div class="rbi-item-info-header rbi-span-10 rbi-purple">Risk Matrix</div>
                     <div class="rbi-item rbi-span-5 rbi-row-span-2 rbi-lightgray">CoF</div>
                     <div class="rbi-item rbi-span-5 rbi-lightgray">PoF</div>
                     <div class="rbi-item rbi-extra-lightgray">A<br>Rare</div>
@@ -1251,7 +1251,7 @@
             console.log(note)
 
             const titleDiv = document.createElement("div");
-            titleDiv.className = "rbi-item-info-context rbi-span-2 rbi-purple";
+            titleDiv.className = "rbi-item-info-context rbi-span-2 rbi-extra-lightgray";
             titleDiv.textContent = title;
 
             const valueDiv = document.createElement("div");

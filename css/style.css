@@ -709,8 +709,8 @@ textarea {
 .rbi-item-info-context {
     
     display: flex;
-    justify-content: left;
-    align-items: left;
+    justify-content: flex-start;
+    text-align: left; 
     padding: 8px;
     font-size: 16px;
     border-left: 1px solid black;
