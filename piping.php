@@ -394,6 +394,31 @@
             </div>
             <div class="modal-body">
 
+                <!-- <div class="rbi-grid">
+                    <div class="rbi-item rbi-span-10 rbi-lightgray">POF | PROBABILITY OF FAILURE</div>
+                    <div class="rbi-item rbi-span-3 rbi-extra-lightgray">Damage Mechanism</div>
+                    <div class="rbi-item rbi-span-3 rbi-extra-lightgray">Probability of Failure Level</div>
+                    <div class="rbi-item rbi-span-4 rbi-extra-lightgray">Comment</div>
+
+                    <div class="rbi-item rbi-span-10 rbi-lightgray">COF | CONSEQUENCE OF FAILURE</div>
+                    <div class="rbi-item rbi-span-2 rbi-extra-lightgray">Consequence</div>
+                    <div class="rbi-item rbi-span-4 rbi-extra-lightgray">Consequence of Failure Level</div>
+                    <div class="rbi-item rbi-span-4 rbi-extra-lightgray">Comment</div>
+
+                    <!-- People -->
+                    <!-- <div class="rbi-item rbi-span-2 rbi-extra-lightgray">People</div>
+                    <div class="rbi-item rbi-span-4"></div>
+                    <div class="rbi-item rbi-span-4"></div> -->
+
+                    <!-- Asset / Production -->
+                    <!-- <div class="rbi-item rbi-span-2 rbi-extra-lightgray">Assets / Production Loss</div>
+                    <div class="rbi-item rbi-span-4"></div>
+                    <div class="rbi-item rbi-span-4"></div> -->
+
+                    
+
+                <!-- </div> -->
+
                 <div class="rbi-grid">
                     <div class="rbi-item rbi-span-10 rbi-lightgray">POF | PROBABILITY OF FAILURE</div>
                     <div class="rbi-item rbi-span-3 rbi-extra-lightgray">Damage Mechanism</div>
@@ -415,9 +440,16 @@
                     <div class="rbi-item rbi-span-4"></div>
                     <div class="rbi-item rbi-span-4"></div>
 
-                </div>
+                    <!-- Environment -->
+                    <div class="rbi-item rbi-span-2 rbi-extra-lightgray">Environment</div>
+                    <div class="rbi-item rbi-span-4"></div>
+                    <div class="rbi-item rbi-span-4"></div>
 
-                <div class="rbi-grid">
+                    <!-- Reputation -->
+                    <div class="rbi-item rbi-span-2 rbi-extra-lightgray">Reputation</div>
+                    <div class="rbi-item rbi-span-4"></div>
+                    <div class="rbi-item rbi-span-4"></div>
+
                     <div class="rbi-item rbi-span-5 rbi-row-span-2 rbi-lightgray">CoF</div>
                     <div class="rbi-item rbi-span-5 rbi-lightgray">PoF</div>
                     <div class="rbi-item rbi-extra-lightgray">A<br>Rare</div>
