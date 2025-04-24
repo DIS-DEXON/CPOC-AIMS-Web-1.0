@@ -1109,6 +1109,13 @@
 
     function create_modal_rbi_table_POF(data) {
         const containerPOF = document.getElementById("rbi-container-POF");
+        const prob_level_describe = {"A": "Never heard in E&P industry but could occur",
+                                     "B": "Event has occurred in the E&P industry or is unlikely to occur in CPOC",
+                                     "C": "Event occurred more than once in the E&P industry or has occurred in CPOC",
+                                     "D": "Event occurred several time per year in the E&P industry or once per year in CPOC",
+                                     "E": "Event occurred frequently in the E&P industry or occurred several times per year in CPOC"
+                                    };
+
         const parsedData = JSON.parse(data);
         const rbiData = parsedData[0] || {}; 
         containerPOF.innerHTML = "";
@@ -1134,9 +1141,9 @@
         containerPOF.appendChild(header4);
 
         for (let i = 1; i <= 5; i++) {
-            const damage = rbiData[`PoF_damage_value_${i}`] ?? " ";
-            const prop = rbiData[`PoF_value_${i}`] ?? " ";
-            const comment = rbiData[`PoF_note_${i}`] ?? " ";
+            const damage = rbiData[`PoF_damage_value_${i}`] ?? "";
+            const prop = rbiData[`PoF_value_${i}`] ?? "";
+            const comment = rbiData[`PoF_note_${i}`] ?? "";
 
             const damageDiv = document.createElement("div");
             damageDiv.className = "rbi-item-info-context rbi-span-3";
@@ -1144,7 +1151,7 @@
 
             const propDiv = document.createElement("div");
             propDiv.className = "rbi-item-info-context rbi-span-3";
-            propDiv.textContent = prop;
+            propDiv.textContent = (prop != "") ? `Rare (${prop}) | ${prob_level_describe[prop]}` : " ";
 
             const commentDiv = document.createElement("div");
             commentDiv.className = "rbi-item-info-context rbi-span-4";
