@@ -388,7 +388,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Risk Matrix</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="clearDataInTable()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -398,25 +398,17 @@
                     <div class="rbi-item rbi-span-3 rbi-extra-lightgray">Damage Mechanism</div>
                     <div class="rbi-item rbi-span-3 rbi-extra-lightgray">Probability of Failure Level</div>
                     <div class="rbi-item rbi-span-4 rbi-extra-lightgray">Comment</div>
-
-                    <!-- People -->
-                    <!-- <div class="rbi-item rbi-span-2 rbi-extra-lightgray">People</div>
-                    <div class="rbi-item rbi-span-4"></div>
-                    <div class="rbi-item rbi-span-4"></div> -->
-
-                    <!-- Asset / Production -->
-                    <!-- <div class="rbi-item rbi-span-2 rbi-extra-lightgray">Assets / Production Loss</div>
-                    <div class="rbi-item rbi-span-4"></div>
-                    <div class="rbi-item rbi-span-4"></div> -->
-
                 </div>
+            
                 <div class="rbi-grid" id="rbi-container-COF">
-                <div class="rbi-item rbi-span-10 rbi-lightgray">COF | CONSEQUENCE OF FAILURE</div>
+                    <div class="rbi-item rbi-span-10 rbi-lightgray">COF | CONSEQUENCE OF FAILURE</div>
                     <div class="rbi-item rbi-span-2 rbi-extra-lightgray">Consequence</div>
                     <div class="rbi-item rbi-span-4 rbi-extra-lightgray">Consequence of Failure Level</div>
                     <div class="rbi-item rbi-span-4 rbi-extra-lightgray">Comment</div>
                 </div>
+                
                 <div class="rbi-grid">
+
                     <div class="rbi-item rbi-span-5 rbi-row-span-2 rbi-lightgray">CoF</div>
                     <div class="rbi-item rbi-span-5 rbi-lightgray">PoF</div>
                     <div class="rbi-item rbi-extra-lightgray">A<br>Rare</div>
@@ -1123,39 +1115,71 @@
         get_gen_doc(id_line);
         $('#library_modal').modal('show');
     }
-    function create_modal_rbi_table(data) {
-    const containerPOF = document.getElementById("rbi-container-POF");
 
-    const rbiData = JSON.parse(data)[0]; 
+    function create_modal_rbi_table_POF(data) {
+        const containerPOF = document.getElementById("rbi-container-POF");
 
-    console.log(rbiData)
-    for (let i = 1; i <= 5; i++) {
-        const damage = rbiData[`PoF_damage_value_${i}`];
-        const prop = rbiData[`PoF_value_${i}`];
-        const comment = rbiData[`PoF_note_${i}`];
+        const rbiData = JSON.parse(data)[0];
 
-        // <div class="rbi-item rbi-span-2 rbi-extra-lightgray">Assets / Production Loss</div>
-        // <div class="rbi-item rbi-span-4"></div>
-        // <div class="rbi-item rbi-span-4"></div>
+        console.log(rbiData)
+        for (let i = 1; i <= 5; i++) {
+            const damage = rbiData[`PoF_damage_value_${i}`];
+            const prop = rbiData[`PoF_value_${i}`];
+            const comment = rbiData[`PoF_note_${i}`];
 
-        const damageDiv = document.createElement("div");
-        damageDiv.className = "rbi-item rbi-span-2 rbi-extra-lightgray";
-        damageDiv.textContent = damage;
+            const damageDiv = document.createElement("div");
+            damageDiv.className = "rbi-item rbi-span-3";
+            damageDiv.textContent = damage;
 
-        const propDiv = document.createElement("div");
-        propDiv.className = "rbi-item rbi-span-4";
-        propDiv.textContent = prop;
+            const propDiv = document.createElement("div");
+            propDiv.className = "rbi-item rbi-span-3";
+            propDiv.textContent = prop;
 
-        const commentDiv = document.createElement("div");
-        commentDiv.className = "rbi-item rbi-span-4";
-        commentDiv.textContent = comment;
+            const commentDiv = document.createElement("div");
+            commentDiv.className = "rbi-item rbi-span-4";
+            commentDiv.textContent = comment;
 
-        containerPOF.appendChild(damageDiv);
-        containerPOF.appendChild(valueDiv);
-        containerPOF.appendChild(commentDiv);
-
+            containerPOF.appendChild(damageDiv);
+            containerPOF.appendChild(propDiv);
+            containerPOF.appendChild(commentDiv);
+        }
     }
-}
+
+    function create_modal_rbi_table_COF(data) {
+        const containerCOF = document.getElementById("rbi-container-COF");
+        const cof_list = ["people", "assets_production_loss", "environment", "reputation"];
+        const cof_title_list = ["People", "Assets / Production Loss", "Environment", "Reputation"];
+
+        const rbiData = JSON.parse(data)[0];
+        
+        for (let i = 0; i <= 3; i++) {
+            const value = rbiData[`CoF_${cof_list[i]}_value`];
+            const note = rbiData[`CoF_${cof_list[i]}_note`];
+
+            const titleDiv = document.createElement("div");
+            titleDiv.className = "rbi-item rbi-span-2 rbi-extra-lightgray";
+            titleDiv.textContent = cof_title_list[i];
+            
+            const valueDiv = document.createElement("div");
+            valueDiv.className = "rbi-item rbi-span-4";
+            valueDiv.textContent = value;
+
+            const noteDiv = document.createElement("div");
+            noteDiv.className = "rbi-item rbi-span-4";
+            noteDiv.textContent = note;
+
+            containerCOF.appendChild(titleDiv);
+            containerCOF.appendChild(valueDiv);
+            containerCOF.appendChild(noteDiv);
+        }
+    }
+
+    function clearDataInTable() {
+        const containerPOF = document.getElementById("rbi-container-POF");
+        const containerCOF = document.getElementById("rbi-container-COF");
+        containerPOF.remove();
+        containerCOF.remove();
+    }
 
     function call_modal_rbi(o) {
         console.log(o.data.fieldData.risk_level);
@@ -1170,7 +1194,8 @@
             },
             async: false,
             success: function (data) {
-                create_modal_rbi_table(data.response.scriptResult)
+                create_modal_rbi_table_POF(data.response.scriptResult);
+                create_modal_rbi_table_COF(data.response.scriptResult);
             },
             error: function (error) {
                 console.log(error);
