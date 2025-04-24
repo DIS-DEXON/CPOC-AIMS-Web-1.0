@@ -368,7 +368,7 @@
     <div class="modal-dialog modal-dialog-centered" style="min-width: 1600px;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Risk Matrix</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">RBI ASSESSMENT</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -378,7 +378,7 @@
                 <div class="rbi-grid" id="rbi-container-COF"></div>
                 
                 <div class="rbi-grid">
-                    <div class="rbi-item-info-header rbi-span-10 rbi-purple">Risk Matrix</div>
+                    <div class="rbi-item-info-header rbi-span-10 rbi-purple">CPOC RISK MATRIX</div>
                     <div class="rbi-item rbi-span-5 rbi-row-span-2 rbi-lightgray">CoF</div>
                     <div class="rbi-item rbi-span-5 rbi-lightgray">PoF</div>
                     <div class="rbi-item rbi-extra-lightgray">A<br>Rare</div>
@@ -1169,6 +1169,12 @@
         const containerCOF = document.getElementById("rbi-container-COF");
         const cof_list = ["people", "assets_production_loss", "environment", "reputation"];
         const cof_title_list = ["People", "Assets / Production Loss", "Environment", "Reputation"];
+        const cof_level = {
+            "people": ["Minor (1)", "Moderate (2)", "Significant (3)", "Serious (4)", "Critical (5)"],
+            "assets_production_loss": ["Insignificant (1)", "Minor (2)", "Moderate (3)", "Major (4)", "Critical (5)"],
+            "environment": ["Insignificant (1)", "Minor (2)", "Moderate (3)", "Major (4)", "Critical (5)"],
+            "reputation": ["Insignificant (1)", "Minor (2)", "Moderate (3)", "Major (4)", "Critical (5)"],
+        };
 
         const parsedData = JSON.parse(data);
         const rbiData = parsedData[0] || {};
@@ -1195,6 +1201,7 @@
         containerCOF.appendChild(header4);
 
         for (let i =0; i <= 3; i++) {
+            const name = cof_list[i] ?? "";
             const title = cof_title_list[i] ?? "";
             const value = rbiData[`CoF_${cof_list[i]}_value`] ?? "";
             const note = rbiData[`CoF_${cof_list[i]}_note`] ?? "";
@@ -1205,7 +1212,7 @@
 
             const valueDiv = document.createElement("div");
             valueDiv.className = "rbi-item-info-context rbi-span-4";
-            valueDiv.textContent = value;
+            valueDiv.textContent = (value != "") ? cof_level[name][value-1] : "";
 
             const noteDiv = document.createElement("div");
             noteDiv.className = "rbi-item-info-context rbi-span-4";
