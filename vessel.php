@@ -1233,6 +1233,32 @@
     function call_modal_rbi(o) {
         console.log(o.data.fieldData.risk_level);
         console.log(o.data.fieldData.rbi_recommendation);
+        $.ajax({
+            type: "GET",
+            url: "https://" + url_api + "/fmi/data/v2/databases/Vessel/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_line,
+            dataType: 'json',
+            headers: {
+                "Authorization": "Bearer " + _token_vessel,
+                "Content-Type": "application/json"
+            },
+            async: false,
+            success: function (data) {
+                console.log(JSON.parse(data.response.scriptResult))
+                // create_modal_rbi_table_POF(data.response.scriptResult);
+                // create_modal_rbi_table_COF(data.response.scriptResult);
+            },
+            error: function (error) {
+                console.log(error);
+                console.log(error.responseJSON.messages[0].code);
+                if(error.responseJSON.messages[0].code == 401) {
+                    // no record match
+                } else {
+                    get_token_vessel();
+                    _token_vessel = $.cookie("_token_vessel");
+                    call_modal_rbi(o);
+                }
+            }
+        });
         $('#rbi_modal').modal('show');
         if(riskLvId) {
             $('#' + riskLvId).html("");
