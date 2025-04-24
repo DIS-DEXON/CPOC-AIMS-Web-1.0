@@ -1193,9 +1193,9 @@
         containerCOF.appendChild(header4);
 
         for (let i =0; i <= 3; i++) {
-            const title = cof_title_list[i] ?? " ";
-            const value = rbiData[`CoF_${cof_list[i]}_value`] ?? " ";
-            const note = rbiData[`CoF_${cof_list[i]}_note`] ?? " ";
+            const title = cof_title_list[i] ?? "";
+            const value = rbiData[`CoF_${cof_list[i]}_value`] ?? "";
+            const note = rbiData[`CoF_${cof_list[i]}_note`] ?? "";
 
             const titleDiv = document.createElement("div");
             titleDiv.className = "rbi-item-info-context rbi-span-2 rbi-purple";
