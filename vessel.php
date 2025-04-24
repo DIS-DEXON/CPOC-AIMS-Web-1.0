@@ -393,6 +393,8 @@
             </div>
             <div class="modal-body">
                 <div class="rbi-nav"></div>
+                <ul class="nav nav-tabs" id="myTab" role="tablist"></ul>
+
                 <div class="rbi-grid " id="rbi-container-POF"></div>
                 <div class="rbi-grid" id="rbi-container-COF"></div>
 
@@ -1236,7 +1238,7 @@
     function create_nav(rawData) {
         var data = JSON.parse(rawData)
         const componentDict = {};
-        
+        console.log(data)
         data.forEach(item => {
             const comp = item.component;
             if (!componentDict[comp]) {
@@ -1275,10 +1277,7 @@
     }
 
     function select_component(rawData,component="shell"){
-        console.log(typeof rawData,component)
-        
         const data = JSON.parse(rawData)
-        console.log(data,component)
         const selectData = data.filter(item => item.component === component);
         create_modal_rbi_table_POF(selectData);
         create_modal_rbi_table_COF(selectData);
