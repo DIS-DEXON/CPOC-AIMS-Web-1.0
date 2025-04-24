@@ -719,3 +719,13 @@ textarea {
 #rbi-container-COF{
     /* margin-bottom: 20px; */
 }
+
+.rbi-header {
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.rbi-header-text {
+    font-weight: 900;
+    margin-right: 15px;
+}
