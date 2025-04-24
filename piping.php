@@ -1197,7 +1197,7 @@
             valueDiv.textContent = value;
 
             const noteDiv = document.createElement("div");
-            noteDiv.className = "rib-item rbi-span-4";
+            noteDiv.className = "rbi-item rbi-span-4";
             noteDiv.textContent = note;
 
             containerCOF.appendChild(titleDiv);
