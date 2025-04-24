@@ -392,6 +392,9 @@
                 </button>
             </div>
             <div class="modal-body">
+                <nav>
+                    <div class="nev nav-tabs" id="nav-tab" role="tablist"></div>
+                </nav>
                 <div class="rbi-grid " id="rbi-container-POF"></div>
                 <div class="rbi-grid " id="rbi-container-COF"></div>
                 <div class="rbi-grid">
@@ -1232,6 +1235,26 @@
         $('#library_modal').modal('show');
     }
 
+    function create_navbar_rbi_table(data) {
+        const navContainer = document.getElementById("nav-tab");
+        navContainer.innerHTML = "";
+
+        for (let i = 0; i < data.length; i++) {
+            const button = document.createElement("button");
+            button.className = "nav-link" + (i === 0 ? " active" : "");
+            button.id = `tab-${i}`;
+            button.setAttribute("data-toggle", "tab");
+            button.setAttribute("data-target", `#tab-content-${i}`);
+            button.type = "button";
+            button.setAttribute("role", "tab");
+            button.setAttribute("aria-controls", `tab-content-${i}`);
+            button.setAttribute("aria-selected", i === 0 ? "true" : "false");
+            button.textContent = data[i]["component"];
+
+            navContainer.appendChild(button);
+        }
+    }
+
     function create_modal_rbi_table_POF(data) {
         const containerPOF = document.getElementById("rbi-container-POF");
         const prob_level_describe = {"A": "Never heard in E&P industry but could occur",
@@ -1354,7 +1377,8 @@
             },
             async: false,
             success: function (data) {
-                console.log(JSON.parse(data.response.scriptResult))
+                console.log(JSON.parse(data.response.scriptResult));
+                create_navbar_rbi_table(JSON.parse(data.response.scriptResult));
                 create_modal_rbi_table_POF(data.response.scriptResult);
                 create_modal_rbi_table_COF(data.response.scriptResult);
             },
