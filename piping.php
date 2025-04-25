@@ -1176,7 +1176,6 @@
             "reputation": ["Insignificant (1)", "Minor (2)", "Moderate (3)", "Major (4)", "Critical (5)"],
         };
 
-
         const parsedData = JSON.parse(data);
         const rbiData = parsedData[0] || {};
         containerCOF.innerHTML = "";
