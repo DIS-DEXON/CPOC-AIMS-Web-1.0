@@ -665,6 +665,9 @@ textarea {
 .rbi-lightgray {
     background-color: lightgray;
 }
+.rbi-span-1 {
+    grid-column: span 1;
+}
 .rbi-span-2 {
     grid-column: span 2;
 }
