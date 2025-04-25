@@ -1710,24 +1710,17 @@
         get_gen_doc(id_tag,type);
         $('#library_modal').modal('show');
     }
-    function create_modal_rbi_table_POF(data) {
-        const containerPOF = document.getElementById("rbi-container-POF");
-        const prob_level_describe = {
-            "A": "Never heard in E&P industry but could occur",
-            "B": "Event has occurred in the E&P industry or is unlikely to occur in CPOC",
-            "C": "Event occurred more than once in the E&P industry or has occurred in CPOC",
-            "D": "Event occurred several time per year in the E&P industry or once per year in CPOC",
-            "E": "Event occurred frequently in the E&P industry or occurred several times per year in CPOC"
-        };
-
+   
     function create_nav(parsedData) {
         const sectionNameDict = {};
         parsedData.forEach(item => {
             const secName = item.section_name;
-            if (!sectionNameDict[secName]) {
-                sectionNameDict[secName] = [];
+            const secNo = item.section_no;
+            const nameNav = secName +" No."+ secNo
+            if (!sectionNameDict[nameNav]) {
+                sectionNameDict[nameNav] = [];
             }
-            sectionNameDict[secName].push(item);
+            sectionNameDict[nameNav].push(item);
         });
 
         const navUl = document.querySelector("#myTab");
@@ -1759,8 +1752,9 @@
         }
     }
 
-    function select_section_name(parsedData, sectionName){
-        const selectData = parsedData.filter(item => item.section_name === sectionName);
+    function select_section_name(parsedData, sectionName,){
+        listData = sectionName.split(" No.");
+        const selectData = parsedData.filter(item => item.section_name === listData[0] && item.section_no === listData[1]);
         create_modal_rbi_table_POF(selectData);
         create_modal_rbi_table_COF(selectData);
     }
@@ -1769,16 +1763,19 @@
         return selectData = parsedData.filter(item => item["section_type"].includes(sectionType));
     }
 
-    function create_modal_rbi_table_POF(parsedData, sectionType) {
+    function create_modal_rbi_table_POF(parsedData) {
+        console.log(parsedData);
         const containerPOF = document.getElementById("rbi-container-POF");
-        const prob_level_describe = {"A": "Never heard in E&P industry but could occur",
-                                     "B": "Event has occurred in the E&P industry or is unlikely to occur in CPOC",
-                                     "C": "Event occurred more than once in the E&P industry or has occurred in CPOC",
-                                     "D": "Event occurred several time per year in the E&P industry or once per year in CPOC",
-                                     "E": "Event occurred frequently in the E&P industry or occurred several times per year in CPOC"
-                                    };
+        const prob_level_describe = {
+            "A": "Never heard in E&P industry but could occur",
+            "B": "Event has occurred in the E&P industry or is unlikely to occur in CPOC",
+            "C": "Event occurred more than once in the E&P industry or has occurred in CPOC",
+            "D": "Event occurred several time per year in the E&P industry or once per year in CPOC",
+            "E": "Event occurred frequently in the E&P industry or occurred several times per year in CPOC"
+        };
+
         const rbiData = parsedData[0] || {};
-        containerPOF.innerHTML = "";
+        containerPOF.innerHTML = "";  
 
         const header1 = document.createElement("div");
         header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
@@ -1786,9 +1783,9 @@
         containerPOF.appendChild(header1);
 
         const groups = {
-            "External DAMAGE MECHANISM": "ext",
-            "Internal DAMAGE MECHANISM": "int",
-            "OTHER THREAS": "other_threat"
+            "External DAMAGE MECHANISM": { prefix: "ext", rowCount: 3 },
+            "Internal DAMAGE MECHANISM": { prefix: "int", rowCount: 4 },
+            "OTHER THREATS": { prefix: "other_threat", rowCount: 8 }
         };
 
         for (const [groupName, groupData] of Object.entries(groups)) {
@@ -1796,46 +1793,44 @@
             groupHeader.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
             groupHeader.textContent = groupName;
             containerPOF.appendChild(groupHeader);
-
-            ["Damage Mechanism", "Probability of Failure Level", "Comment"].forEach((text, index) => {
+            var textHead = "Damage Mechanism"
+            if (groupName === "OTHER THREATS"){
+                textHead = "Threat Type"
+            }
+            [ textHead, "Probability of Failure Level", "Comment"].forEach((text, index) => {
                 const h = document.createElement("div");
                 h.className = `rbi-item-info-header rbi-span-${index === 0 ? 2 : 4} rbi-purple border-inline-white`;
                 h.textContent = text;
                 containerPOF.appendChild(h);
             });
 
-            for (let i = 1; i < 9; i++) {
-                const damage = rbiData[`PoF_damage_value_${i}_${groupData}`] || "";
-                const value = rbiData[`PoF_value_${i}_${groupData}`] || "";
-                const comment = rbiData[`PoF_note_${i}_${groupData}`] || "";
-                
-                // const damage = `PoF_damage_value_${i}_${groupData}`;
-                // const value = `PoF_value_${i}_${groupData}`;
-                // const comment = `PoF_note_${i}_${groupData}`;
-                
-                const damageDiv = document.createElement("div");
-                damageDiv.className = "rbi-item-info-context rbi-span-2";
-                damageDiv.textContent = damage;
+            for (let i = 1; i <= groupData.rowCount; i++) {
+                const damage = rbiData[`PoF_damage_value_${i}_${groupData.prefix}`] || "";
+                const value = rbiData[`PoF_value_${i}_${groupData.prefix}`] || "";
+                const comment = rbiData[`PoF_note_${i}_${groupData.prefix}`] || "";
 
-                const valueDiv = document.createElement("div");
-                valueDiv.className = "rbi-item-info-context rbi-span-4";
-                valueDiv.textContent = value !== "" ? `Rare (${value}) | ${prob_level_describe[value]}` : "";
+                    const damageDiv = document.createElement("div");
+                    damageDiv.className = "rbi-item-info-context rbi-span-2";
+                    damageDiv.textContent = damage ;
 
-                const commentDiv = document.createElement("div");
-                commentDiv.className = "rbi-item-info-context rbi-span-4";
-                commentDiv.textContent = comment;
+                    const valueDiv = document.createElement("div");
+                    valueDiv.className = "rbi-item-info-context rbi-span-4";
+                    valueDiv.textContent = value ? `Rare (${value}) | ${prob_level_describe[value]}` : "";
 
-                containerPOF.appendChild(damageDiv);
-                containerPOF.appendChild(valueDiv);
-                containerPOF.appendChild(commentDiv);
-                
+                    const commentDiv = document.createElement("div");
+                    commentDiv.className = "rbi-item-info-context rbi-span-4";
+                    commentDiv.textContent = comment ;
+
+                    containerPOF.appendChild(damageDiv);
+                    containerPOF.appendChild(valueDiv);
+                    containerPOF.appendChild(commentDiv);
             }
         }
     }
 
-    function call_modal_rbi(o,tab="incoming") {
+
+    function call_modal_rbi(o,sectionType) {
         console.log(o.data.fieldData.risk_level);
-        console.log(tab)
         $.ajax({
             type: "GET",
             url: "https://" + url_api + "/fmi/data/v2/databases/Pipeline/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_tag,
