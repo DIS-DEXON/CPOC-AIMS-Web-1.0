@@ -1708,7 +1708,66 @@
         $('#library_modal').modal('show');
     }
 
-    function call_modal_rbi(o) {
+    function filter_data(parsedData, sectionType) {
+        return selectData = parsedData.filter(item => item["section_type"].includes(sectionType));
+    }
+
+    function create_modal_rbi_table_POF(parsedData, sectionType) {
+        const containerPOF = document.getElementById("rbi-container-POF");
+        const prob_level_describe = {"A": "Never heard in E&P industry but could occur",
+                                     "B": "Event has occurred in the E&P industry or is unlikely to occur in CPOC",
+                                     "C": "Event occurred more than once in the E&P industry or has occurred in CPOC",
+                                     "D": "Event occurred several time per year in the E&P industry or once per year in CPOC",
+                                     "E": "Event occurred frequently in the E&P industry or occurred several times per year in CPOC"
+                                    };
+        const rbiData = parsedData[0] || {};
+        containerPOF.innerHTML = "";
+
+        const header1 = document.createElement("div");
+        header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
+        header1.textContent = "POF | PROBABILITY OF FAILURE";
+        containerPOF.appendChild(header1);
+
+        const header2 = document.createElement("div");
+        header2.className = "rbi-item-info-header rbi-span-3 rbi-purple border-inline-white";
+        header2.textContent = "Damage Mechanism";
+        containerPOF.appendChild(header2);
+
+        const header3 = document.createElement("div");
+        header3.className = "rbi-item-info-header rbi-span-3 rbi-purple border-inline-white";
+        header3.textContent = "Probability of Failure Level";
+        containerPOF.appendChild(header3);
+
+        const header4 = document.createElement("div");
+        header4.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
+        header4.textContent = "Comment";
+        containerPOF.appendChild(header4);
+
+        for (let i = 1; i <= 5; i++) {
+            const damage = rbiData[`PoF_damage_value_${i}`] ?? "";
+            const prop = rbiData[`PoF_value_${i}`] ?? "";
+            const comment = rbiData[`PoF_note_${i}`] ?? "";
+
+            const damageDiv = document.createElement("div");
+            damageDiv.className = "rbi-item-info-context rbi-span-3";
+            damageDiv.textContent = damage;
+
+            const propDiv = document.createElement("div");
+            propDiv.className = "rbi-item-info-context rbi-span-3";
+            propDiv.textContent = (prop != "") ? `Rare (${prop}) | ${prob_level_describe[prop]}` : " ";
+
+            const commentDiv = document.createElement("div");
+            commentDiv.className = "rbi-item-info-context rbi-span-4";
+            commentDiv.textContent = comment;
+
+            containerPOF.appendChild(damageDiv);
+            containerPOF.appendChild(propDiv);
+            containerPOF.appendChild(commentDiv);
+        }
+    }
+
+    function call_modal_rbi(o, sectionType) {
+        console.log(sectionType);
         console.log(o.data.fieldData.risk_level);
         $.ajax({
             type: "GET",
@@ -1720,9 +1779,11 @@
             },
             async: false,
             success: function (data) {
-                console.log(JSON.parse(data.response.scriptResult));
-                // create_modal_rbi_table_POF(data.response.scriptResult);
-                // create_modal_rbi_table_COF(data.response.scriptResult);
+                // console.log(JSON.parse(data.response.scriptResult));
+                const filterData = filter_data(JSON.parse(data.response.scriptResult), sectionType);
+                console.log(filterData);
+                create_modal_rbi_table_POF(filterData);
+                // create_modal_rbi_table_COF(filterData);
             },
             error: function (error) {
                 console.log(error);
@@ -1732,7 +1793,7 @@
                 } else {
                     get_token_pipeline();
                     _token_pipeline = $.cookie("_token_pipeline");
-                    call_modal_rbi(o);
+                    call_modal_rbi(o, sectionType);
                 }
             }
         });
@@ -1832,7 +1893,7 @@
                         $('<button type="button" title="RBI"></button>').addClass('btn btn-sm fas fa-border-all')
                             .on('dxclick', function (e) {
                                 console.log(options.value)
-                                call_modal_rbi(options);
+                                call_modal_rbi(options, "outgoing");
                             }).appendTo(container);
                         $('<button type="button" title="Inspection History"></button>').addClass('btn btn-sm fas fa-history')
                             .on('dxclick', function (e) {
@@ -2281,7 +2342,7 @@
                         $('<button type="button" title="RBI"></button>').addClass('btn btn-sm fas fa-border-all')
                             .on('dxclick', function (e) {
                                 console.log(options.value)
-                                call_modal_rbi(options);
+                                call_modal_rbi(options, "pipeline");
                             }).appendTo(container);
                         $('<button type="button" title="Inspection History"></button>').addClass('btn btn-sm fas fa-history')
                             .on('dxclick', function (e) {
@@ -2719,7 +2780,7 @@
                         $('<button type="button" title="RBI"></button>').addClass('btn btn-sm fas fa-border-all')
                             .on('dxclick', function (e) {
                                 console.log(options.value)
-                                call_modal_rbi(options);
+                                call_modal_rbi(options, "incoming");
                             }).appendTo(container);
                         $('<button type="button" title="Inspection History"></button>').addClass('btn btn-sm fas fa-history')
                             .on('dxclick', function (e) {
