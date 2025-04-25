@@ -665,6 +665,9 @@ textarea {
 .rbi-lightgray {
     background-color: lightgray;
 }
+.rbi-span-1 {
+    grid-column: span 1;
+}
 .rbi-span-2 {
     grid-column: span 2;
 }
@@ -675,7 +678,7 @@ textarea {
 }
 .rbi-span-4 {
     grid-column: span 4;
-    min-height: 50px;
+    /* min-height: 50px; */
 }
 .rbi-span-5 {
     grid-column: span 5;
@@ -715,10 +718,9 @@ textarea {
     font-size: 16px;
     border-left: 1px solid black;
     border-bottom: 1px solid black;
+    min-height: 55px;
 }
-#rbi-container-COF{
-    /* margin-bottom: 20px; */
-}
+
 
 .rbi-header {
     font-size: 22px;

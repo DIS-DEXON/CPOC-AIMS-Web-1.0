@@ -287,7 +287,24 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="rbi_modal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="min-width: 1600px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Risk Matrix</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs" id="myTab" role="tablist"></ul>
+                <div class="rbi-grid" id="rbi-container-POF"></div>
+                <div class="rbi-grid" id="rbi-container-COF"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     var _token_structure = $.cookie("_token_structure");
@@ -936,7 +953,100 @@
 
         $("#info_modal").modal('show');
     }
+    function create_modal_rbi_table_POF(parsedData) {
+        console.log(parsedData);
+        const containerPOF = document.getElementById("rbi-container-POF");
 
+        const rbiData = parsedData[0] || {}; 
+        const rbiDate = Object.keys(rbiData).length === 0 ? '' : moment(rbiData.rbi_date).format('DD MMM YYYY');
+        $('#rbi_date').html(rbiDate);
+        $('#rbi_date').html(rbiDate);
+        containerPOF.innerHTML = "";
+        console.log(rbiData)
+        const header1 = document.createElement("div");
+        header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
+        header1.textContent = "POF | PROBABILITY OF FAILURE";
+        containerPOF.appendChild(header1);
+
+        const header2 = document.createElement("div");
+        header2.className = "rbi-item-info-header rbi-span-2 rbi-purple border-inline-white";
+        header2.textContent = "RISK";
+        containerPOF.appendChild(header2);
+
+        const header3 = document.createElement("div");
+        header3.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
+        header3.textContent = "Probability of Failure Level";
+        containerPOF.appendChild(header3);
+
+        const header4 = document.createElement("div");
+        header4.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
+        header4.textContent = "Comment";
+        containerPOF.appendChild(header4);
+
+        for (let i = 1; i <= 5; i++) {
+            // const damage = rbiData[`PoF_damage_value_${i}`] ?? "";
+            // const prop = rbiData[`PoF_value_${i}`] ?? "";
+            // const comment = rbiData[`PoF_note_${i}`] ?? "";
+            const riskList = ["A","B","C","D","E","F"]
+            const riskContextList = ["Fatique Analysis","Accidental Damage","Anomalies","Probability of corrosion","Confidence in Assessment","Utillzation Factor"]
+            const riskLevelDiv = document.createElement("div");
+            riskLevelDiv.className = "rbi-item-info-context rbi-span-1";
+            riskLevelDiv.textContent = riskList[i];
+
+            const riskContextDiv = document.createElement("div");
+            riskContextDiv.className = "rbi-item-info-context rbi-span-2";
+            riskContextDiv.textContent = riskContextList[i];
+
+            const damageDiv = document.createElement("div");
+            damageDiv.className = "rbi-item-info-context rbi-span-1";
+            damageDiv.textContent = damage;
+
+            const propDiv = document.createElement("div");
+            propDiv.className = "rbi-item-info-context rbi-span-4";
+            propDiv.textContent = (prop != "") ? `Rare (${prop}) | ${prob_level_describe[prop]}` : " ";
+
+            const commentDiv = document.createElement("div");
+            commentDiv.className = "rbi-item-info-context rbi-span-4";
+            commentDiv.textContent = comment;
+
+            containerPOF.appendChild(damageDiv);
+            containerPOF.appendChild(propDiv);
+            containerPOF.appendChild(commentDiv);
+        }
+    }
+    function call_modal_rbi(o) {
+
+        // $.ajax({
+        //     type: "GET",
+        //     url: "https://" + url_api + "/fmi/data/v2/databases/Pipeline/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_tag,
+        //     dataType: 'json',
+        //     headers: {
+        //         "Authorization": "Bearer " + _token_pipeline,
+        //         "Content-Type": "application/json"
+        //     },
+        //     async: false,
+        //     success: function (data) {
+        //         // console.log(JSON.parse(data.response.scriptResult));
+        //         // const filterData = filter_data(JSON.parse(data.response.scriptResult), sectionType);
+        //         console.log(data);
+        //         // create_nav(filterData);
+        //         // create_modal_rbi_table_POF(data);
+        //         // create_modal_rbi_table_COF(filterData);
+        //     },
+        //     error: function (error) {
+        //         console.log(error);
+        //         console.log(error.responseJSON.messages[0].code);
+        //         if(error.responseJSON.messages[0].code == 401) {
+        //             // no record match
+        //         } else {
+        //             get_token_pipeline();
+        //             _token_pipeline = $.cookie("_token_pipeline");
+        //             call_modal_rbi(o);
+        //         }
+        //     }
+        // });
+        $('#rbi_modal').modal('show');
+    }
     function get_inspection_history(id_tag,tag_no) {
         let history_list = '';
         $.ajax({
@@ -1457,10 +1567,10 @@
                                 call_modal_library(options.value);
                             }).appendTo(container);
                         $('<button type="button" title="RBI"></button>').addClass('btn btn-sm fas fa-border-all')
-                        .on('dxclick', function (e) {
-                            console.log(options.value)
-                            call_modal_rbi(options);
-                        }).appendTo(container);
+                            .on('dxclick', function (e) {
+                                console.log(options.value)
+                                call_modal_rbi(options);
+                            }).appendTo(container);
                         $('<button type="button" title="Inspection History"></button>').addClass('btn btn-sm fas fa-history')
                             .on('dxclick', function (e) {
                                 get_inspection_history(options.value, options.data.fieldData.tag_no);
