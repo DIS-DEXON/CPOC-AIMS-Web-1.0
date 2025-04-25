@@ -1238,7 +1238,6 @@
     function create_nav(rawData) {
         var data = JSON.parse(rawData)
         const componentDict = {};
-        console.log(data)
         data.forEach(item => {
             const comp = item.component;
             if (!componentDict[comp]) {
@@ -1266,6 +1265,7 @@
             btn.setAttribute("aria-controls", component.toLowerCase());
             btn.setAttribute("aria-selected", isFirst ? "true" : "false");
             btn.textContent = component;
+            // btn.style.backgroundColor = "#6610f2";
             btn.addEventListener("click", function () {
                 select_component(rawData, component);
             });
@@ -1292,27 +1292,27 @@
                                     };
         const rbiData = parsedData[0] || {}; 
         containerPOF.innerHTML = "";
-        console.log(rbiData)
         const header1 = document.createElement("div");
         header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
         header1.textContent = "POF | PROBABILITY OF FAILURE";
-        containerPOF.appendChild(header1);
 
         const header2 = document.createElement("div");
         header2.className = "rbi-item-info-header rbi-span-3 rbi-purple border-inline-white";
         header2.textContent = "Damage Mechanism";
-        containerPOF.appendChild(header2);
 
         const header3 = document.createElement("div");
         header3.className = "rbi-item-info-header rbi-span-3 rbi-purple border-inline-white";
         header3.textContent = "Probability of Failure Level";
-        containerPOF.appendChild(header3);
 
         const header4 = document.createElement("div");
         header4.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
         header4.textContent = "Comment";
-        containerPOF.appendChild(header4);
 
+        containerPOF.appendChild(header1);
+        containerPOF.appendChild(header2);
+        containerPOF.appendChild(header3);
+        containerPOF.appendChild(header4);
+                                    
         for (let i = 1; i <= 5; i++) {
             const damage = rbiData[`PoF_damage_value_${i}`] ?? "";
             const prop = rbiData[`PoF_value_${i}`] ?? "";
@@ -1347,30 +1347,28 @@
         const header1 = document.createElement("div");
         header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
         header1.textContent = "COF | CONSEQUENCE OF FAILURE";
-        containerCOF.appendChild(header1);
 
         const header2 = document.createElement("div");
         header2.className = "rbi-item-info-header rbi-span-2 rbi-purple border-inline-white";
         header2.textContent = "Consequence";
-        containerCOF.appendChild(header2);
 
         const header3 = document.createElement("div");
         header3.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
         header3.textContent = "Consequence of Failure Level";
-        containerCOF.appendChild(header3);
 
         const header4 = document.createElement("div");
         header4.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
         header4.textContent = "Comment";
+
+        containerCOF.appendChild(header1);
+        containerCOF.appendChild(header2);
+        containerCOF.appendChild(header3);
         containerCOF.appendChild(header4);
 
         for (let i =0; i <= 3; i++) {
             const title = cof_title_list[i] ?? " ";
             const value = rbiData[`CoF_${cof_list[i]}_value`] ?? " ";
             const note = rbiData[`CoF_${cof_list[i]}_note`] ?? " ";
-            console.log(title)
-            console.log(value)
-            console.log(note)
 
             const titleDiv = document.createElement("div");
             titleDiv.className = "rbi-item-info-context rbi-span-2 rbi-extra-lightgray";
@@ -1392,9 +1390,6 @@
 
     }
     function call_modal_rbi(o) {
-        console.log(o.data.fieldData.risk_level);
-        console.log(o.data.fieldData.rbi_recommendation);
-
         $.ajax({
             type: "GET",
             url: "https://" + url_api + "/fmi/data/v2/databases/Vessel/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_line,
@@ -1405,7 +1400,6 @@
             },
             async: false,
             success: function (data) {
-                console.log(JSON.parse(data.response.scriptResult))
                 create_nav(data.response.scriptResult)
                 create_modal_rbi_table_POF(JSON.parse(data.response.scriptResult));
                 create_modal_rbi_table_COF(JSON.parse(data.response.scriptResult));
