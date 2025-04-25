@@ -1797,8 +1797,8 @@
 
     function create_modal_rbi_table_COF(parsedData) {
         const containerCOF = document.getElementById("rbi-container-COF");
-        const cof_list = ["people", "assets_production_loss", "environment", "reputation"];
-        const cof_title_list = ["People", "Assets / Production Loss", "Environment", "Reputation"];
+        const cof_list = ["people", "assets_production_loss", "environment"];
+        const cof_title_list = ["People", "Assets / Production Loss", "Environment"];
         const cof_level = {
             "people": ["Minor (1)", "Moderate (2)", "Significant (3)", "Serious (4)", "Critical (5)"],
             "assets_production_loss": ["Insignificant (1)", "Minor (2)", "Moderate (3)", "Major (4)", "Critical (5)"],
@@ -1808,6 +1808,7 @@
 
         const rbiData = parsedData[0] || {};
         containerCOF.innerHTML = "";
+        console.log(rbiData);
 
         const header1 = document.createElement("div");
         header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
@@ -1829,7 +1830,7 @@
         header4.textContent = "Comment";
         containerCOF.appendChild(header4);
 
-        for (let i =0; i <= 3; i++) {
+        for (let i =0; i <= 2; i++) {
             const name = cof_list[i] ?? "";
             const title = cof_title_list[i] ?? " ";
             const value = rbiData[`CoF_${cof_list[i]}_value`] ?? " ";
