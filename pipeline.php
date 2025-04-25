@@ -1869,6 +1869,7 @@
             success: function (data) {
                 // console.log(JSON.parse(data.response.scriptResult));
                 const filterData = filter_data(JSON.parse(data.response.scriptResult), sectionType);
+                console.log(filterData);
                 create_nav(filterData);
                 create_modal_rbi_table_POF(filterData);
                 create_modal_rbi_table_COF(filterData);
