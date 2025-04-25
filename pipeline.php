@@ -1281,6 +1281,7 @@
                 </button>
             </div>
             <div class="modal-body">
+                <ul class="nav nav-tabs" id="myTab" role="tablist"></ul>
                 <div class="rbi-grid" id="rbi-container-POF"></div>
                 <div class="rbi-grid" id="rbi-container-COF"></div>
                 <div class="rbi-grid">
@@ -1719,10 +1720,64 @@
             "E": "Event occurred frequently in the E&P industry or occurred several times per year in CPOC"
         };
 
-        const parsedData = JSON.parse(data);
-        const rbiData = parsedData[0] || {}; 
-        // const rbiDate = Object.keys(rbiData).length === 0 ? '' : moment(rbiData.rbi_date).format('DD MMM YYYY');
-        // $('#rbi_date').html(rbiDate);
+    function create_nav(parsedData) {
+        const sectionNameDict = {};
+        parsedData.forEach(item => {
+            const secName = item.section_name;
+            if (!sectionNameDict[secName]) {
+                sectionNameDict[secName] = [];
+            }
+            sectionNameDict[secName].push(item);
+        });
+
+        const navUl = document.querySelector("#myTab");
+        navUl.innerHTML = ""; 
+
+        let isFirst = true;
+        for (const sectionName in sectionNameDict) {
+            const li = document.createElement("li");
+            li.className = "nav-item";
+            li.setAttribute("role", "presentation");
+
+            const btn = document.createElement("button");
+            btn.className = "nav-link" + (isFirst ? " active" : "");
+            btn.id = `${sectionName.toLowerCase()}-tab`;
+            btn.setAttribute("data-toggle", "tab");
+            btn.setAttribute("data-target", `#${sectionName.toLowerCase()}`);
+            btn.setAttribute("type", "button");
+            btn.setAttribute("role", "tab");
+            btn.setAttribute("aria-controls", sectionName.toLowerCase());
+            btn.setAttribute("aria-selected", isFirst ? "true" : "false");
+            btn.textContent = sectionName;
+            btn.addEventListener("click", function () {
+                select_section_name(parsedData, sectionName);
+            });
+            li.appendChild(btn);
+            navUl.appendChild(li);
+
+            isFirst = false;
+        }
+    }
+
+    function select_section_name(parsedData, sectionName){
+        const selectData = parsedData.filter(item => item.section_name === sectionName);
+        create_modal_rbi_table_POF(selectData);
+        create_modal_rbi_table_COF(selectData);
+    }
+
+    function filter_data(parsedData, sectionType) {
+        return selectData = parsedData.filter(item => item["section_type"].includes(sectionType));
+    }
+
+    function create_modal_rbi_table_POF(parsedData, sectionType) {
+        const containerPOF = document.getElementById("rbi-container-POF");
+        const prob_level_describe = {"A": "Never heard in E&P industry but could occur",
+                                     "B": "Event has occurred in the E&P industry or is unlikely to occur in CPOC",
+                                     "C": "Event occurred more than once in the E&P industry or has occurred in CPOC",
+                                     "D": "Event occurred several time per year in the E&P industry or once per year in CPOC",
+                                     "E": "Event occurred frequently in the E&P industry or occurred several times per year in CPOC"
+                                    };
+        const rbiData = parsedData[0] || {};
         containerPOF.innerHTML = "";
 
         const header1 = document.createElement("div");
@@ -1791,9 +1846,11 @@
             },
             async: false,
             success: function (data) {
-                console.log(JSON.parse(data.response.scriptResult));
-                create_modal_rbi_table_POF(data.response.scriptResult);
-                // create_modal_rbi_table_COF(data.response.scriptResult);
+                // console.log(JSON.parse(data.response.scriptResult));
+                const filterData = filter_data(JSON.parse(data.response.scriptResult), sectionType);
+                create_nav(filterData);
+                create_modal_rbi_table_POF(filterData);
+                create_modal_rbi_table_COF(filterData);
             },
             error: function (error) {
                 console.log(error);
@@ -1803,7 +1860,7 @@
                 } else {
                     get_token_pipeline();
                     _token_pipeline = $.cookie("_token_pipeline");
-                    call_modal_rbi(o);
+                    call_modal_rbi(o, sectionType);
                 }
             }
         });
@@ -1903,8 +1960,7 @@
                         $('<button type="button" title="RBI"></button>').addClass('btn btn-sm fas fa-border-all')
                             .on('dxclick', function (e) {
                                 console.log(options.value)
-                                console.log(container)
-                                call_modal_rbi(options,"outgoing");
+                                call_modal_rbi(options, "outgoing");
                             }).appendTo(container);
                         $('<button type="button" title="Inspection History"></button>').addClass('btn btn-sm fas fa-history')
                             .on('dxclick', function (e) {
