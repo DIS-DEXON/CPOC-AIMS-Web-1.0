@@ -1285,6 +1285,7 @@
                 <div class="rbi-grid" id="rbi-container-POF"></div>
                 <div class="rbi-grid" id="rbi-container-COF"></div>
                 <div class="rbi-grid">
+                <div class="rbi-item-info-header rbi-span-10 rbi-purple">RISK MATRIX</div>
                     <div class="rbi-item rbi-span-5 rbi-row-span-2 rbi-lightgray">CoF</div>
                     <div class="rbi-item rbi-span-5 rbi-lightgray">PoF</div>
                     <div class="rbi-item rbi-extra-lightgray">A<br>Rare</div>
@@ -1825,6 +1826,68 @@
                     containerPOF.appendChild(valueDiv);
                     containerPOF.appendChild(commentDiv);
             }
+        }
+    }
+
+    function create_modal_rbi_table_COF(parsedData) {
+        const containerCOF = document.getElementById("rbi-container-COF");
+        const cof_list = ["people", "assets_production_loss", "environment"];
+        const cof_title_list = ["People", "Assets / Production Loss", "Environment"];
+        const cof_level = {
+            "people": ["Minor (1)", "Moderate (2)", "Significant (3)", "Serious (4)", "Critical (5)"],
+            "assets_production_loss": ["Insignificant (1)", "Minor (2)", "Moderate (3)", "Major (4)", "Critical (5)"],
+            "environment": ["Insignificant (1)", "Minor (2)", "Moderate (3)", "Major (4)", "Critical (5)"],
+            "reputation": ["Insignificant (1)", "Minor (2)", "Moderate (3)", "Major (4)", "Critical (5)"],
+        };
+
+        const rbiData = parsedData[0] || {};
+        containerCOF.innerHTML = "";
+
+        const header1 = document.createElement("div");
+        header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
+        header1.textContent = "COF | CONSEQUENCE OF FAILURE";
+        containerCOF.appendChild(header1);
+
+        const header2 = document.createElement("div");
+        header2.className = "rbi-item-info-header rbi-span-2 rbi-purple border-inline-white";
+        header2.textContent = "Consequence";
+        containerCOF.appendChild(header2);
+
+        const header3 = document.createElement("div");
+        header3.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
+        header3.textContent = "Consequence of Failure Level";
+        containerCOF.appendChild(header3);
+
+        const header4 = document.createElement("div");
+        header4.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
+        header4.textContent = "Comment";
+        containerCOF.appendChild(header4);
+
+        for (let i =0; i <= 2; i++) {
+            const name = cof_list[i] ?? "";
+            const title = cof_title_list[i] ?? " ";
+            const value = rbiData[`CoF_${cof_list[i]}_value`] ?? " ";
+            const note = rbiData[`CoF_${cof_list[i]}_note`] ?? " ";
+            console.log(title)
+            console.log(value)
+            console.log(note)
+
+            const titleDiv = document.createElement("div");
+            titleDiv.className = "rbi-item-info-context rbi-span-2 rbi-extra-lightgray";
+            titleDiv.textContent = title;
+
+            const valueDiv = document.createElement("div");
+            valueDiv.className = "rbi-item-info-context rbi-span-4";
+            valueDiv.textContent = (value != "") ? cof_level[name][value-1] : "";
+
+            const noteDiv = document.createElement("div");
+            noteDiv.className = "rbi-item-info-context rbi-span-4";
+            noteDiv.textContent = note;
+
+            containerCOF.appendChild(titleDiv);
+            containerCOF.appendChild(valueDiv);
+            containerCOF.appendChild(noteDiv);
+
         }
     }
 
