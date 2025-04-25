@@ -399,6 +399,7 @@
                 <div class="rbi-grid" id="rbi-container-COF"></div>
 
                 <div class="rbi-grid">
+                    <div class="rbi-item-info-header rbi-span-10 rbi-purple">RISK MATRIX</div>
                     <div class="rbi-item rbi-span-5 rbi-row-span-2 rbi-lightgray">CoF</div>
                     <div class="rbi-item rbi-span-5 rbi-lightgray">PoF</div>
                     <div class="rbi-item rbi-extra-lightgray">A<br>Rare</div>
@@ -1282,6 +1283,7 @@
         create_modal_rbi_table_POF(selectData);
         create_modal_rbi_table_COF(selectData);
     }
+    
     function create_modal_rbi_table_POF(parsedData) {
         const containerPOF = document.getElementById("rbi-container-POF");
         const prob_level_describe = {"A": "Never heard in E&P industry but could occur",

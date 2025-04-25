@@ -1710,6 +1710,32 @@
 
     function call_modal_rbi(o) {
         console.log(o.data.fieldData.risk_level);
+        $.ajax({
+            type: "GET",
+            url: "https://" + url_api + "/fmi/data/v2/databases/Pipeline/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_tag,
+            dataType: 'json',
+            headers: {
+                "Authorization": "Bearer " + _token_pipeline,
+                "Content-Type": "application/json"
+            },
+            async: false,
+            success: function (data) {
+                console.log(JSON.parse(data.response.scriptResult));
+                // create_modal_rbi_table_POF(data.response.scriptResult);
+                // create_modal_rbi_table_COF(data.response.scriptResult);
+            },
+            error: function (error) {
+                console.log(error);
+                console.log(error.responseJSON.messages[0].code);
+                if(error.responseJSON.messages[0].code == 401) {
+                    // no record match
+                } else {
+                    get_token_pipeline();
+                    _token_pipeline = $.cookie("_token_pipeline");
+                    call_modal_rbi(o);
+                }
+            }
+        });
         $('#rbi_modal').modal('show');
         if(riskLvId) {
             $('#' + riskLvId).html("");

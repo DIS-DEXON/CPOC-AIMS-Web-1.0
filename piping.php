@@ -392,12 +392,13 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body ">
-                <div class="rbi-grid " id="rbi-container-POF"></div>
-                <div class="rbi-grid " id="rbi-container-COF"></div>
+            <div class="modal-body">
+                <div class="rbi-header">RBI Date: <span class="rbi-header-text" id="rbi_date"></span> Visual Interval (yrs): <span class="rbi-header-text" id="vt_insp_interval"></span> NDE Interval (yrs): <span class="rbi-header-text" id="nde_insp_interval"></span></div>
+                <div class="rbi-grid" id="rbi-container-POF"></div>
+                <div class="rbi-grid" id="rbi-container-COF"></div>
                 <!-- <div class="rbi-grid" id="rbi-container"></div> -->
                 <div class="rbi-grid">
-                    <div class="rbi-item-info-header rbi-span-10 rbi-purple">CPOC RISK MATRIX</div>
+                    <div class="rbi-item-info-header rbi-span-10 rbi-purple">RISK MATRIX</div>
                     <div class="rbi-item rbi-span-5 rbi-row-span-2 rbi-lightgray">CoF</div>
                     <div class="rbi-item rbi-span-5 rbi-lightgray">PoF</div>
                     <div class="rbi-item rbi-extra-lightgray">A<br>Rare</div>
@@ -1116,6 +1117,9 @@
 
         const parsedData = JSON.parse(data);
         const rbiData = parsedData[0] || {}; 
+        const rbiDate = Object.keys(rbiData).length === 0 ? '' : moment(rbiData.rbi_date).format('DD MMM YYYY');
+        $('#rbi_date').html(rbiDate);
+        $('#rbi_date').html(rbiDate);
         containerPOF.innerHTML = "";
         console.log(rbiData)
         const header1 = document.createElement("div");
@@ -1124,12 +1128,12 @@
         containerPOF.appendChild(header1);
 
         const header2 = document.createElement("div");
-        header2.className = "rbi-item-info-header rbi-span-3 rbi-purple border-inline-white";
+        header2.className = "rbi-item-info-header rbi-span-2 rbi-purple border-inline-white";
         header2.textContent = "Damage Mechanism";
         containerPOF.appendChild(header2);
 
         const header3 = document.createElement("div");
-        header3.className = "rbi-item-info-header rbi-span-3 rbi-purple border-inline-white";
+        header3.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
         header3.textContent = "Probability of Failure Level";
         containerPOF.appendChild(header3);
 
@@ -1144,11 +1148,11 @@
             const comment = rbiData[`PoF_note_${i}`] ?? "";
 
             const damageDiv = document.createElement("div");
-            damageDiv.className = "rbi-item-info-context rbi-span-3";
+            damageDiv.className = "rbi-item-info-context rbi-span-2";
             damageDiv.textContent = damage;
 
             const propDiv = document.createElement("div");
-            propDiv.className = "rbi-item-info-context rbi-span-3";
+            propDiv.className = "rbi-item-info-context rbi-span-4";
             propDiv.textContent = (prop != "") ? `Rare (${prop}) | ${prob_level_describe[prop]}` : " ";
 
             const commentDiv = document.createElement("div");
@@ -1227,8 +1231,9 @@
     }
     
     function call_modal_rbi(o) {
-        console.log(o.data.fieldData.risk_level);
-        console.log(o.data.fieldData.rbi_recommendation);
+        console.log(o.data.fieldData);
+        $('#nde_insp_interval').html(o.data.fieldData.OSI_NDE_insp_interval);
+        $('#vt_insp_interval').html(o.data.fieldData.OSI_VT_insp_interval);
         $.ajax({
             type: "GET",
             url: "https://" + url_api + "/fmi/data/v2/databases/Piping/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_line,
