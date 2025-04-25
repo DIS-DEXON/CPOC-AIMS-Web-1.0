@@ -840,6 +840,39 @@
         $('#library_modal').modal('show');
     }
 
+    function create_modal_rbi_table_COF(parsedData) {
+        const containerCOF = document.getElementById("rbi-container-COF");
+        const cof_risk_label = ["G", "H", "I", "J", "K"];
+        const cof_risk_detail = ["Consequential", "Risk of Life", "Risk of Environment", "Risk of Production", "Cost of Repair"];
+
+        const rbiData = parsedData[0] || {};
+        containerCOF.innerHTML = "";
+
+        const header1 = document.createElement("div");
+        header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
+        header1.textContent = "COF | CONSEQUENCE OF FAILURE";
+        containerCOF.appendChild(header1);
+
+        const header2 = document.createElement("div");
+        header2.className = "rbi-item-info-header rbi-span2 rbi-purple border-inline-white";
+        header2.textContent = "Risk";
+        containerCOF.appendChild(header2);
+
+        const header3 = document.createElement("div");
+        header3.className = "rbi-item-info-header rbi-span2 rbi-purple border-inline-white";
+        header3.textContent = "Consequence of Failure Level";
+        containerCOF.appendChild(header3);
+
+        const header4 = document.createElement("div");
+        header4.className = "rbi-item-info-header rbi-span2 rbi-purple border-inline-white";
+        header4.textContent = "Comment";
+        containerCOF.appendChild(header4);
+
+        for (let i = 0; i <= 4; i++) {
+            
+        }
+    }
+
     function get_file(url,file_name) {
         // console.log(url);
 
@@ -1423,6 +1456,11 @@
                                 console.log(options.value)
                                 call_modal_library(options.value);
                             }).appendTo(container);
+                        $('<button type="button" title="RBI"></button>').addClass('btn btn-sm fas fa-border-all')
+                        .on('dxclick', function (e) {
+                            console.log(options.value)
+                            call_modal_rbi(options);
+                        }).appendTo(container);
                         $('<button type="button" title="Inspection History"></button>').addClass('btn btn-sm fas fa-history')
                             .on('dxclick', function (e) {
                                 get_inspection_history(options.value, options.data.fieldData.tag_no);
