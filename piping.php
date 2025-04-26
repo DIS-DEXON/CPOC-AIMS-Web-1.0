@@ -457,6 +457,9 @@
                     <div class="rbi-item rbi-span-4"></div>
 
                     <!-- Asset / Production -->
+                    <div class="rbi-item rbi-span-2 rbi-extra-lightgray">Assets / Production Loss</div>
+                    <div class="rbi-item rbi-span-4"></div>
+                    <div class="rbi-item rbi-span-4"></div>
 
                 </div>
 
