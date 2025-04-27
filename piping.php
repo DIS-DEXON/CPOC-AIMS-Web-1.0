@@ -395,7 +395,9 @@
             <div class="modal-body ">
                 <div class="rbi-grid " id="rbi-container-POF"></div>
                 <div class="rbi-grid" id="rbi-container-COF"></div>
+                <!-- <div class="rbi-grid" id="rbi-container"></div> -->
                 <div class="rbi-grid">
+
                     <div class="rbi-item rbi-span-5 rbi-row-span-2 rbi-lightgray">CoF</div>
                     <div class="rbi-item rbi-span-5 rbi-lightgray">PoF</div>
                     <div class="rbi-item rbi-extra-lightgray">A<br>Rare</div>
@@ -1102,12 +1104,13 @@
         get_gen_doc(id_line);
         $('#library_modal').modal('show');
     }
+
     function create_modal_rbi_table_POF(data) {
         const containerPOF = document.getElementById("rbi-container-POF");
         const parsedData = JSON.parse(data);
         const rbiData = parsedData[0] || {}; 
         containerPOF.innerHTML = "";
-
+        console.log(rbiData)
         const header1 = document.createElement("div");
         header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
         header1.textContent = "POF | PROBABILITY OF FAILURE";
@@ -1149,6 +1152,59 @@
             containerPOF.appendChild(damageDiv);
             containerPOF.appendChild(propDiv);
             containerPOF.appendChild(commentDiv);
+        }
+    }
+
+    function create_modal_rbi_table_COF(data) {
+        const containerCOF = document.getElementById("rbi-container-COF");
+        const cof_list = ["people", "assets_production", "environment", "reputation"];
+        const cof_title_list = ["People", "Assets / Production Loss", "Environment", "Reputation"];
+
+        const parsedData = JSON.parse(data);
+        const rbiData = parsedData[0] || {};
+        containerCOF.innerHTML = "";
+
+        const header1 = document.createElement("div");
+        header1.className = "rbi-item rbi-span-10 rbi-purple border-inline-white";
+        header1.textContent = "COF | CONSEQUENCE OF FAILURE";
+        containerCOF.appendChild(header1);
+
+        const header2 = document.createElement("div");
+        header2.className = "rbi-item rbi-span-2 rbi-purple border-inline-white";
+        header2.textContent = "Consequence";
+        containerCOF.appendChild(header2);
+
+        const header3 = document.createElement("div");
+        header3.className = "rbi-item rbi-span-4 rbi-purple border-inline-white";
+        header3.textContent = "Consequence of Failure Level";
+        containerCOF.appendChild(header3);
+
+        const header4 = document.createElement("div");
+        header4.className = "rbi-item rbi-span-4 rbi-purple border-inline-white";
+        header4.textContent = "Comment";
+        containerCOF.appendChild(header4);
+
+        for (let i =0; i <= 3; i++) {
+            const title = cof_title_list[i] ?? " ";
+            const value = rbiData[`CoF_${cof_list[i]}_value`] ?? " ";
+            const note = rbiData[`CoF_${cof_list[i]}_note`] ?? " ";
+
+            const titleDiv = document.createElement("div");
+            titleDiv.className = "rbi-item rbi-span-2 rbi-purple";
+            titleDiv.textContent = title;
+
+            const valueDiv = document.createElement("div");
+            valueDiv.className = "rbi-item rbi-span-4";
+            valueDiv.textContent = value;
+
+            const noteDiv = document.createElement("div");
+            noteDiv.className = "rib-item rbi-span-4";
+            noteDiv.textContent = note;
+
+            containerCOF.appendChild(titleDiv);
+            containerCOF.appendChild(valueDiv);
+            containerCOF.appendChild(noteDiv);
+
         }
 
     }
@@ -1224,8 +1280,8 @@
             },
             async: false,
             success: function (data) {
-                create_modal_rbi_table_POF(data.response.scriptResult)
-                create_modal_rbi_table_COF(data.response.scriptResult)
+                create_modal_rbi_table_POF(data.response.scriptResult);
+                create_modal_rbi_table_COF(data.response.scriptResult);
             },
             error: function (error) {
                 console.log(error);

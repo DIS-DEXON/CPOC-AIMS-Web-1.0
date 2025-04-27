@@ -621,10 +621,9 @@ textarea {
     text-align: start;
 }
 .rbi-item {
-    
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: left;
     padding: 2px;
     border-left: 1px solid black;
     border-bottom: 1px solid black;
@@ -688,7 +687,6 @@ textarea {
 .rbi-purple{
     background-color:#45184E;
     color: #eee;
-    
 }
 .border-inline-white{
     outline: #000;
