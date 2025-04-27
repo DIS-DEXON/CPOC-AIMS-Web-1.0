@@ -336,7 +336,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Inspection History : <span id="history_tag_no"></span></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -369,11 +369,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Risk Matrix</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button id="closeBtn" type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
+                <div class="rbi-grid " id="rbi-container-POF"></div>
+                <div class="rbi-grid" id="rbi-container-COF"></div>
                 <div class="rbi-grid">
                     <div class="rbi-item rbi-span-5 rbi-row-span-2 rbi-lightgray">CoF</div>
                     <div class="rbi-item rbi-span-5 rbi-lightgray">PoF</div>
@@ -1104,8 +1106,84 @@
         $('#library_modal').modal('show');
     }
 
+
+    function create_modal_rbi_table_POF(data) {
+        const containerPOF = document.getElementById("rbi-container-POF");
+        const parsedData = JSON.parse(data);
+        const rbiData = parsedData[0] || {}; 
+        containerPOF.innerHTML = "";
+
+        const header1 = document.createElement("div");
+        header1.className = "rbi-item rbi-span-10 rbi-purple border-inline-white";
+        header1.textContent = "POF | PROBABILITY OF FAILURE";
+        containerPOF.appendChild(header1);
+
+        const header2 = document.createElement("div");
+        header2.className = "rbi-item rbi-span-3 rbi-purple border-inline-white";
+        header2.textContent = "Damage Mechanism";
+        containerPOF.appendChild(header2);
+
+        const header3 = document.createElement("div");
+        header3.className = "rbi-item rbi-span-3 rbi-purple border-inline-white";
+        header3.textContent = "Probability of Failure Level";
+        containerPOF.appendChild(header3);
+
+        const header4 = document.createElement("div");
+        header4.className = "rbi-item rbi-span-4 rbi-purple border-inline-white";
+        header4.textContent = "Comment";
+        containerPOF.appendChild(header4);
+
+        for (let i = 1; i <= 5; i++) {
+            const damage = rbiData[`PoF_damage_value_${i}`] ?? " ";
+            const prop = rbiData[`PoF_value_${i}`] ?? " ";
+            const comment = rbiData[`PoF_note_${i}`] ?? " ";
+
+            const damageDiv = document.createElement("div");
+            damageDiv.className = "rbi-item rbi-span-3";
+            damageDiv.textContent = damage;
+
+            const propDiv = document.createElement("div");
+            propDiv.className = "rbi-item rbi-span-3";
+            propDiv.textContent = prop;
+
+            const commentDiv = document.createElement("div");
+            commentDiv.className = "rbi-item rbi-span-4";
+            commentDiv.textContent = comment;
+
+            containerPOF.appendChild(damageDiv);
+            containerPOF.appendChild(propDiv);
+            containerPOF.appendChild(commentDiv);
+        }
+
+    }
+
     function call_modal_rbi(o) {
-        console.log(o.data.fieldData.risk_level);
+        console.log("level",o.data.fieldData.risk_level);
+        
+        $.ajax({
+            type: "GET",
+            url: "https://" + url_api + "/fmi/data/v2/databases/Flowline/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_line,
+            dataType: 'json',
+            headers: {
+                "Authorization": "Bearer " + _token_flowline,
+                "Content-Type": "application/json"
+            },
+            async: false,
+            success: function (data) {
+                create_modal_rbi_table_POF(data.response.scriptResult)
+            },
+            error: function (error) {
+                console.log(error);
+                console.log(error.responseJSON.messages[0].code);
+                if(error.responseJSON.messages[0].code == 401) {
+                    // no record match
+                } else {
+                    get_token_flowline();
+                    _token_flowline = $.cookie("_token_flowline");
+                    call_modal_rbi(o);
+                }
+            }
+        });
         $('#rbi_modal').modal('show');
         if(riskLvId) {
             $('#' + riskLvId).html("");
