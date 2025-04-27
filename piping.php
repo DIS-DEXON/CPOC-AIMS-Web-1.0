@@ -1109,23 +1109,24 @@
         containerPOF.innerHTML = "";
 
         const header1 = document.createElement("div");
-        header1.className = "rbi-item rbi-span-10 rbi-purple border-inline-white";
+        header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
         header1.textContent = "POF | PROBABILITY OF FAILURE";
-        containerPOF.appendChild(header1);
 
         const header2 = document.createElement("div");
-        header2.className = "rbi-item rbi-span-3 rbi-purple border-inline-white";
+        header2.className = "rbi-item-info-header rbi-span-3 rbi-purple border-inline-white";
         header2.textContent = "Damage Mechanism";
-        containerPOF.appendChild(header2);
 
         const header3 = document.createElement("div");
-        header3.className = "rbi-item rbi-span-3 rbi-purple border-inline-white";
+        header3.className = "rbi-item-info-header rbi-span-3 rbi-purple border-inline-white";
         header3.textContent = "Probability of Failure Level";
-        containerPOF.appendChild(header3);
 
         const header4 = document.createElement("div");
-        header4.className = "rbi-item rbi-span-4 rbi-purple border-inline-white";
+        header4.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
         header4.textContent = "Comment";
+
+        containerPOF.appendChild(header1);
+        containerPOF.appendChild(header2);
+        containerPOF.appendChild(header3);
         containerPOF.appendChild(header4);
 
         for (let i = 1; i <= 5; i++) {
@@ -1134,15 +1135,15 @@
             const comment = rbiData[`PoF_note_${i}`] ?? " ";
 
             const damageDiv = document.createElement("div");
-            damageDiv.className = "rbi-item rbi-span-3";
+            damageDiv.className = "rbi-item-info-context  rbi-span-3";
             damageDiv.textContent = damage;
 
             const propDiv = document.createElement("div");
-            propDiv.className = "rbi-item rbi-span-3";
+            propDiv.className = "rbi-item-info-context  rbi-span-3";
             propDiv.textContent = prop;
 
             const commentDiv = document.createElement("div");
-            commentDiv.className = "rbi-item rbi-span-4";
+            commentDiv.className = "rbi-item-info-context  rbi-span-4";
             commentDiv.textContent = comment;
 
             containerPOF.appendChild(damageDiv);
@@ -1151,7 +1152,65 @@
         }
 
     }
+    // function create_modal_rbi_table_COF(data) {
+    //     const containerPOF = document.getElementById("rbi-container-COF");
+    //     const parsedData = JSON.parse(data);
+    //     console.log(parsedData)
+    //     const rbiData = parsedData[0] || {}; 
+    //     containerPOF.innerHTML = "";
 
+    //     const header1 = document.createElement("div");
+    //     header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
+    //     header1.textContent = "COF | CONSEQUENCE OF FAILURE";
+
+    //     const header2 = document.createElement("div");
+    //     header2.className = "rbi-item-info-header rbi-span-2 rbi-purple border-inline-white";
+    //     header2.textContent = "Consquence;
+
+    //     const header3 = document.createElement("div");
+    //     header3.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
+    //     header3.textContent = "Consquence of Failure Level";
+
+    //     const header4 = document.createElement("div");
+    //     header4.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
+    //     header4.textContent = "Comment";
+
+    //     containerPOF.appendChild(header1);
+    //     containerPOF.appendChild(header2);
+    //     containerPOF.appendChild(header3);
+    //     containerPOF.appendChild(header4);
+    //     consList = ["People","Assets / Production Loss", "Environment","Reputation"]
+    //     for (let i = 1; i <= 5; i++) {
+    //         const assetsNode = rbiData[`CoF_assets_production_loss_note`] ?? " ";
+    //         const assetsvalue = rbiData[`CoF_assets_production_loss_value`] ?? " ";
+    //         const enNote = rbiData[`CoF_environment_note`] ?? " ";
+    //         const enValue = rbiData[`CoF_environment_value`] ?? " ";
+    //         const enValue = rbiData[`CoF_people_note`] ?? " ";
+    //         const enValue = rbiData[`CCoF_people_note`] ?? " ";
+    //         const enValue = rbiData[`CoF_reputation_note`] ?? " ";
+    //         const enValue = rbiData[`CoF_reputation_notevalue`] ?? " ";
+            
+
+    //         const comment = rbiData[`PoF_note_${i}`] ?? " ";
+
+    //         const consDiv = document.createElement("div");
+    //         consDiv.className = "rbi-item-info-context  rbi-span-3";
+    //         consDiv.textContent = consList[i-1];
+
+    //         const propDiv = document.createElement("div");
+    //         propDiv.className = "rbi-item-info-context  rbi-span-3";
+    //         propDiv.textContent = prop;
+
+    //         const commentDiv = document.createElement("div");
+    //         commentDiv.className = "rbi-item-info-context  rbi-span-4";
+    //         commentDiv.textContent = comment;
+
+    //         containerPOF.appendChild(damageconsDivDiv);
+    //         containerPOF.appendChild(propDiv);
+    //         containerPOF.appendChild(commentDiv);
+    //     }
+
+    // }
     function call_modal_rbi(o) {
         console.log(o.data.fieldData.risk_level);
         console.log(o.data.fieldData.rbi_recommendation);
@@ -1166,6 +1225,7 @@
             async: false,
             success: function (data) {
                 create_modal_rbi_table_POF(data.response.scriptResult)
+                create_modal_rbi_table_COF(data.response.scriptResult)
             },
             error: function (error) {
                 console.log(error);

@@ -694,3 +694,28 @@ textarea {
     outline: #000;
     border: 1px solid white;
 }
+#rbi-container-POF {
+    text-align: left;
+    font-size: 20 px;
+}
+
+.rbi-item-info-header {
+    
+    display: flex;
+    font-weight: bold;
+    justify-content: left;
+    align-items: left;
+    padding: 8px;
+    font-size: 18px;
+    border-left: 1px solid black;
+}
+.rbi-item-info-context {
+    
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    padding: 8px;
+    font-size: 16px;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+}
