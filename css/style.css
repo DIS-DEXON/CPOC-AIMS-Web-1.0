@@ -670,6 +670,8 @@ textarea {
 }
 .rbi-span-3 {
     grid-column: span 3;
+    min-height: 40px;
+
 }
 .rbi-span-4 {
     grid-column: span 4;
