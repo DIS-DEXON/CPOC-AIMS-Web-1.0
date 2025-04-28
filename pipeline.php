@@ -1281,6 +1281,13 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="rbi-header">RBI Date: <span class="rbi-header-text" id="rbi_date"></span> 
+                    <span id="outgoing_interval">Visual Interval (yrs): <span class="rbi-header-text" id="outgoing_riser_asz_vt_interval"></span> UT Interval (yrs): <span class="rbi-header-text" id="outgoing_riser_asz_ut_interval"></span> ROV Interval (yrs): <span class="rbi-header-text" id="outgoing_riser_bsz_rov_interval"></span></span>
+
+                    <span id="pipeline_interval">ILI Interval (yrs): <span class="rbi-header-text" id="pipeline_ili_interval"></span> ROV Interval (yrs): <span class="rbi-header-text" id="pipeline_rov_interval"></span></span>
+
+                    <span id="incoming_interval">Visual Interval (yrs): <span class="rbi-header-text" id="incoming_riser_asz_vt_interval"></span> UT Interval (yrs): <span class="rbi-header-text" id="incoming_riser_asz_ut_interval"></span> ROV Interval (yrs): <span class="rbi-header-text" id="incoming_riser_bsz_rov_interval"></span></span>
+                </div>
                 <ul class="nav nav-tabs" id="myTab" role="tablist"></ul>
                 <div class="rbi-grid" id="rbi-container-POF"></div>
                 <div class="rbi-grid" id="rbi-container-COF"></div>
@@ -1717,7 +1724,7 @@
         parsedData.forEach(item => {
             const secName = item.section_name;
             const secNo = item.section_no;
-            const nameNav = secName +" No."+ secNo
+            const nameNav = `Section No. ${secNo} | ${secName}`;
             if (!sectionNameDict[nameNav]) {
                 sectionNameDict[nameNav] = [];
             }
@@ -1894,6 +1901,25 @@
 
     function call_modal_rbi(o,sectionType) {
         console.log(o.data.fieldData);
+        console.log(sectionType);
+        $('#outgoing_interval').hide();
+        $('#pipeline_interval').hide();
+        $('#incoming_interval').hide();
+        if(sectionType == 'outgoing') {
+            $('#outgoing_interval').show();
+        } else if (sectionType == 'incoming') {
+            $('#incoming_interval').show();
+        } else if (sectionType == 'pipeline') {
+            $('#pipeline_interval').show();
+        }
+        $('#outgoing_riser_asz_vt_interval').html(o.data.fieldData.outgoing_riser_asz_vt_interval);
+        $('#outgoing_riser_asz_ut_interval').html(o.data.fieldData.outgoing_riser_asz_ut_interval);
+        $('#outgoing_riser_bsz_rov_interval').html(o.data.fieldData.outgoing_riser_bsz_rov_interval);
+        $('#incoming_riser_asz_vt_interval').html(o.data.fieldData.incoming_riser_asz_vt_interval);
+        $('#incoming_riser_asz_ut_interval').html(o.data.fieldData.incoming_riser_asz_ut_interval);
+        $('#incoming_riser_bsz_rov_interval').html(o.data.fieldData.incoming_riser_bsz_rov_interval);
+        $('#pipeline_ili_interval').html(o.data.fieldData.pipeline_ili_interval);
+        $('#pipeline_rov_interval').html(o.data.fieldData.pipeline_rov_interval);
         $.ajax({
             type: "GET",
             url: "https://" + url_api + "/fmi/data/v2/databases/Pipeline/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_tag,
@@ -1906,7 +1932,9 @@
             success: function (data) {
                 // console.log(JSON.parse(data.response.scriptResult));
                 const filterData = filter_data(JSON.parse(data.response.scriptResult), sectionType);
-                console.log(filterData);
+                console.log('filterData', filterData);
+                const rbiDate = filterData.length === 0 ? '' : moment(filterData[0].rbi_date).format('DD MMM YYYY');
+                $('#rbi_date').html(rbiDate);
                 create_nav(filterData);
                 create_modal_rbi_table_POF(filterData);
                 create_modal_rbi_table_COF(filterData);
