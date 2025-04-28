@@ -1275,7 +1275,7 @@
     <div class="modal-dialog modal-dialog-centered" style="min-width: 1600px;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Risk Matrix</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">RBI ASSESSMENT</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -1893,7 +1893,7 @@
 
 
     function call_modal_rbi(o,sectionType) {
-        console.log(o.data.fieldData.risk_level);
+        console.log(o.data.fieldData);
         $.ajax({
             type: "GET",
             url: "https://" + url_api + "/fmi/data/v2/databases/Pipeline/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_tag,

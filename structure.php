@@ -292,12 +292,13 @@
     <div class="modal-dialog modal-dialog-centered" style="min-width: 1600px;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Risk Matrix</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">RBI ASSESSMENT</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
+                <div class="rbi-header">RBI Date: <span class="rbi-header-text" id="rbi_date"></span> Visual Interval (yrs): <span class="rbi-header-text" id="vt_insp_interval"></span> NDE Interval (yrs): <span class="rbi-header-text" id="nde_insp_interval"></span></div>
                 <ul class="nav nav-tabs" id="myTab" role="tablist"></ul>
                 <div class="rbi-grid-structure" id="rbi-container-POF-structure"></div>
                 <div class="rbi-grid-structure" id="rbi-container-COF-structure"></div>
@@ -1031,6 +1032,8 @@
         const cof_risk_detail = ["Consequential", "Risk of Life", "Risk of Environment", "Risk of Production", "Cost of Repair"];
 
         const rbiData = parsedData[0] || {};
+        const rbiDate = Object.keys(rbiData).length === 0 ? '' : moment(rbiData.rbi_date).format('DD MMM YYYY');
+        $('#rbi_date').html(rbiDate);
         const total = rbiData[`CoF_total`];
         containerCOF.innerHTML = "";
 
@@ -1158,6 +1161,9 @@
     }
 
     function call_modal_rbi(o) {
+        console.log(o.data.fieldData);
+        $('#nde_insp_interval').html(o.data.fieldData.NDE_insp_interval);
+        $('#vt_insp_interval').html(o.data.fieldData.VT_insp_interval);
         $.ajax({
             type: "GET",
             url: "https://" + url_api + "/fmi/data/v2/databases/Structure/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_tag,

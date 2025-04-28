@@ -386,20 +386,21 @@
     <div class="modal-dialog modal-dialog-centered" style="min-width: 1600px;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Risk Matrix</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">RBI ASSESSMENT</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="rbi-nav"></div>
+                <div class="rbi-header">RBI Date: <span class="rbi-header-text" id="rbi_date"></span> External Interval (yrs): <span class="rbi-header-text" id="ext_insp_interval"></span> Internal Interval (yrs): <span class="rbi-header-text" id="int_insp_interval"></span></div>
                 <ul class="nav nav-tabs" id="myTab" role="tablist"></ul>
 
                 <div class="rbi-grid " id="rbi-container-POF"></div>
                 <div class="rbi-grid" id="rbi-container-COF"></div>
 
                 <div class="rbi-grid">
-                    <div class="rbi-item-info-header rbi-span-10 rbi-purple">RISK MATRIX</div>
+                    <div class="rbi-item-info-header rbi-span-10 rbi-purple">CPOC RISK MATRIX</div>
                     <div class="rbi-item rbi-span-5 rbi-row-span-2 rbi-lightgray">CoF</div>
                     <div class="rbi-item rbi-span-5 rbi-lightgray">PoF</div>
                     <div class="rbi-item rbi-extra-lightgray">A<br>Rare</div>
@@ -1293,17 +1294,19 @@
                                      "E": "Event occurred frequently in the E&P industry or occurred several times per year in CPOC"
                                     };
         const rbiData = parsedData[0] || {}; 
+        const rbiDate = Object.keys(rbiData).length === 0 ? '' : moment(rbiData.rbi_date).format('DD MMM YYYY');
+        $('#rbi_date').html(rbiDate);
         containerPOF.innerHTML = "";
         const header1 = document.createElement("div");
         header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
         header1.textContent = "POF | PROBABILITY OF FAILURE";
 
         const header2 = document.createElement("div");
-        header2.className = "rbi-item-info-header rbi-span-3 rbi-purple border-inline-white";
+        header2.className = "rbi-item-info-header rbi-span-2 rbi-purple border-inline-white";
         header2.textContent = "Damage Mechanism";
 
         const header3 = document.createElement("div");
-        header3.className = "rbi-item-info-header rbi-span-3 rbi-purple border-inline-white";
+        header3.className = "rbi-item-info-header rbi-span-4 rbi-purple border-inline-white";
         header3.textContent = "Probability of Failure Level";
 
         const header4 = document.createElement("div");
@@ -1321,11 +1324,11 @@
             const comment = rbiData[`PoF_note_${i}`] ?? "";
 
             const damageDiv = document.createElement("div");
-            damageDiv.className = "rbi-item-info-context rbi-span-3";
+            damageDiv.className = "rbi-item-info-context rbi-span-2";
             damageDiv.textContent = damage;
 
             const propDiv = document.createElement("div");
-            propDiv.className = "rbi-item-info-context rbi-span-3";
+            propDiv.className = "rbi-item-info-context rbi-span-4";
             propDiv.textContent = (prop != "") ? `Rare (${prop}) | ${prob_level_describe[prop]}` : " ";
 
             const commentDiv = document.createElement("div");
@@ -1342,6 +1345,12 @@
         const containerCOF = document.getElementById("rbi-container-COF");
         const cof_list = ["people", "assets_production_loss", "environment", "reputation"];
         const cof_title_list = ["People", "Assets / Production Loss", "Environment", "Reputation"];
+        const cof_level = {
+            "people": ["Minor (1)", "Moderate (2)", "Significant (3)", "Serious (4)", "Critical (5)"],
+            "assets_production_loss": ["Insignificant (1)", "Minor (2)", "Moderate (3)", "Major (4)", "Critical (5)"],
+            "environment": ["Insignificant (1)", "Minor (2)", "Moderate (3)", "Major (4)", "Critical (5)"],
+            "reputation": ["Insignificant (1)", "Minor (2)", "Moderate (3)", "Major (4)", "Critical (5)"],
+        };
 
         const rbiData = parsedData[0] || {};
         containerCOF.innerHTML = "";
@@ -1368,6 +1377,7 @@
         containerCOF.appendChild(header4);
 
         for (let i =0; i <= 3; i++) {
+            const name = cof_list[i] ?? "";
             const title = cof_title_list[i] ?? " ";
             const value = rbiData[`CoF_${cof_list[i]}_value`] ?? " ";
             const note = rbiData[`CoF_${cof_list[i]}_note`] ?? " ";
@@ -1378,7 +1388,7 @@
 
             const valueDiv = document.createElement("div");
             valueDiv.className = "rbi-item-info-context rbi-span-4";
-            valueDiv.textContent = value;
+            valueDiv.textContent = (value != "") ? cof_level[name][value-1] : "";
 
             const noteDiv = document.createElement("div");
             noteDiv.className = "rbi-item-info-context rbi-span-4";
@@ -1392,6 +1402,9 @@
 
     }
     function call_modal_rbi(o) {
+        console.log(o.data.fieldData);
+        $('#ext_insp_interval').html(o.data.fieldData.Ext_insp_interval);
+        $('#int_insp_interval').html(o.data.fieldData.Int_insp_interval);
         $.ajax({
             type: "GET",
             url: "https://" + url_api + "/fmi/data/v2/databases/Vessel/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_line,
