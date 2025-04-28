@@ -616,7 +616,7 @@ textarea {
     border-top: 1px solid black;
     border-right: 1px solid black;
 }
-.rbi-grid-structure{
+.rbi-grid-structure {
     font-size: 14px;
     text-align: center;
     display: grid;
@@ -702,13 +702,18 @@ textarea {
 .rbi-span-10 {
     grid-column: span 10;
 }
+.rbi-span-11 {
+    grid-column: span 11;
+}
 .rbi-span-13 {
     grid-column: span 13;
 }
 .rbi-span-15 {
     grid-column: span 15;
 }
-
+.rbi-span-17 {
+    grid-column: span 17;
+}
 .rbi-span-18 {
     grid-column: span 18;
 }
@@ -718,7 +723,6 @@ textarea {
 .rbi-span-40 {
     grid-column: span 40;
 }
-
 .rbi-row-span-2 {
     grid-row: span 2;
 }
@@ -733,7 +737,6 @@ textarea {
 
 
 .rbi-item-info-header {
-    
     display: flex;
     font-weight: bold;
     justify-content: left;
@@ -743,7 +746,6 @@ textarea {
     border-left: 1px solid black;
 }
 .rbi-item-info-context {
-    
     display: flex;
     justify-content: flex-start;
     text-align: left; 
@@ -769,7 +771,15 @@ textarea {
     font-weight: 900;
     margin-right: 15px;
 }
-#rbi-container-POF-40{
+#rbi-container-POF{
     display: grid;
     grid-template-columns: repeat(40, 1fr); 
+}
+#rbi-container-COF {
+    display: grid;
+    grid-template-columns: repeat(40, 1fr);
+}
+#rbi-container-MORE {
+    display: grid;
+    grid-template-columns: repeat(30, 1fr);
 }

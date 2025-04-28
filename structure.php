@@ -299,9 +299,10 @@
             </div>
             <div class="modal-body">
                 <ul class="nav nav-tabs" id="myTab" role="tablist"></ul>
-                <div class="rbi-grid-structure" id="rbi-container-POF-40"></div>
+                <div class="rbi-grid-structure" id="rbi-container-POF"></div>
+                <div class="rbi-grid-structure" id="rbi-container-COF"></div>
                 <div class="rbi-grid-structure" id="rbi-container-RCM"></div>
-
+                <div class="rbi-grid-structure" id="rbi-container-MORE"></div>
             </div>
         </div>
     </div>
@@ -921,15 +922,10 @@
 
         $("#info_modal").modal('show');
     }
+
     function create_modal_rbi_table_POF(parsedData) {
         console.log(parsedData);
-        const containerPOF = document.getElementById("rbi-container-POF-40");
-        // const prob_level_describe = {"A": "Never heard in E&P industry but could occur",
-        //                              "B": "Event has occurred in the E&P industry or is unlikely to occur in CPOC",
-        //                              "C": "Event occurred more than once in the E&P industry or has occurred in CPOC",
-        //                              "D": "Event occurred several time per year in the E&P industry or once per year in CPOC",
-        //                              "E": "Event occurred frequently in the E&P industry or occurred several times per year in CPOC"
-        //                             };
+        const containerPOF = document.getElementById("rbi-container-POF");
         const rbiData = parsedData[0] || {}; 
         // const rbiDate = Object.keys(rbiData).length === 0 ? '' : moment(rbiData.rbi_date).format('DD MMM YYYY');
         // $('#rbi_date').html(rbiDate);
@@ -1031,66 +1027,134 @@
         containerRCM.appendChild(contextDiv);
 
     }
+
+    function create_modal_rbi_table_COF(parsedData) {
+        const containerCOF = document.getElementById("rbi-container-COF");
+        const cof_risk_label = ["G", "H", "I", "J", "K"];
+        const cof_risk_detail = ["Consequential", "Risk of Life", "Risk of Environment", "Risk of Production", "Cost of Repair"];
+
+        const rbiData = parsedData[0] || {};
+        console.log(rbiData);
+        containerCOF.innerHTML = "";
+
+        const header1 = document.createElement("div");
+        header1.className = "rbi-item-info-header rbi-span-40 rbi-purple border-inline-white";
+        header1.textContent = "COF | CONSEQUENCE OF FAILURE";
+        containerCOF.appendChild(header1);
+
+        const header2 = document.createElement("div");
+        header2.className = "rbi-item-info-header rbi-span-7 rbi-purple border-inline-white";
+        header2.textContent = "Risk";
+        containerCOF.appendChild(header2);
+
+        const header3 = document.createElement("div");
+        header3.className = "rbi-item-info-header rbi-span-15 rbi-purple border-inline-white";
+        header3.textContent = "Consequence of Failure Level";
+        containerCOF.appendChild(header3);
+
+        const header4 = document.createElement("div");
+        header4.className = "rbi-item-info-header rbi-span-18 rbi-purple border-inline-white";
+        header4.textContent = "Comment";
+        containerCOF.appendChild(header4);
+
+        for (let i = 0; i <= 4; i++) {
+            const risk_label = cof_risk_label[i];
+            const risk_detail = cof_risk_detail[i];
+
+            const risk_label_div = document.createElement("div");
+            risk_label_div.className = "rbi-item-info-context rbi-span-1 rbi-extra-lightgray";
+            risk_label_div.textContent = risk_label;
+
+            const risk_detail_div = document.createElement("div");
+            risk_detail_div.className = "rbi-item-info-context rbi-span-6 rbi-extra-lightgray";
+            risk_detail_div.textContent = risk_detail;
+
+            const consequential_id_div = document.createElement("div");
+            consequential_id_div.className = "rbi-item-info-context rbi-span-13";
+            consequential_id_div.textContent = " ";
+
+            const consequential_value_div = document.createElement("div");
+            consequential_value_div.className = "rbi-item-info-context rbi-span-2";
+            consequential_value_div.textContent = " ";
+
+            const comment_div = document.createElement("div");
+            comment_div.className = "rbi-item-info-context rbi-span-18";
+            comment_div.textContent = " ";
+
+            containerCOF.appendChild(risk_label_div);
+            containerCOF.appendChild(risk_detail_div);
+            containerCOF.appendChild(consequential_id_div);
+            containerCOF.appendChild(consequential_value_div);
+            containerCOF.appendChild(comment_div);
+        }
+
+        const totalText = document.createElement("div");
+        totalText.className = "rbi-item-info-context rbi-span-20 rbi-extra-lightgray";
+        totalText.textContent = "Total";
+        containerCOF.appendChild(totalText);
+
+        const total_div = document.createElement("div");
+        total_div.className = "rbi-item-info-context rbi-span-2";
+        total_div.textContent = " ";
+        containerCOF.appendChild(total_div);
+
+        const formulaText = document.createElement("div");
+        formulaText.className = "rbi-item-info-context rbi-span-18 rbi-extra-lightgray";
+        formulaText.textContent = "Y = G + H + I + J + K";
+        containerCOF.appendChild(formulaText);
+    }
+
+    function create_modal_rbi_table_more() {
+        const containerMore = document.getElementById("rbi-container-MORE");
+        const title = ["System Factor S", "Criticality Ranking", "Criticality Ranking Criteria", "Inspection Priority", "Inspection Frequency", "Risk Level"];
+
+        // const rbiData = parsedData[0] || {};
+        containerMore.innerHTML = "";
+
+        for (let i = 0; i < title.length; i++) {
+            const title_div = document.createElement("div");
+            title_div.className = "rbi-item-info-header rbi-span-5 rbi-purple border-inline-white";
+            title_div.textContent = title[i];
+            containerMore.appendChild(title_div);
+        }
+
+        for (let i = 0; i < title.length; i++) {
+            const detail_div = document.createElement("div");
+            detail_div.className = "rbi-item-info-context rbi-span-5";
+            detail_div.textContent = " ";
+            containerMore.appendChild(detail_div);
+        }
+    }
+
     function call_modal_rbi(o) {
-        const mockParsedData = [{
-        PoF_risk_id_a: "A",
-        PoF_value_a: 1,
-        PoF_note_a: "Low probability, rare event",
-
-        PoF_risk_id_b: "B",
-        PoF_value_b: 2,
-        PoF_note_b: "Observed in industry but not locally",
-
-        PoF_risk_id_c: "C",
-        PoF_value_c: 3,
-        PoF_note_c: "Occurred a few times historically",
-
-        PoF_risk_id_d: "D",
-        PoF_value_d: 4,
-        PoF_note_d: "Annual occurrence expected",
-
-        PoF_risk_id_e: "E",
-        PoF_value_e: 5,
-        PoF_note_e: "High frequency incidents",
-
-        PoF_risk_id_f: "F",
-        PoF_value_f: 2,
-        PoF_note_f: "Underestimated factors in analysis"
-    }];
-    mockDataRCM= [{
-        "recommendation" : "This is Mockdata AAaaaaaaaaaaaaaaaaaaaaaaahbkdskhdajhdkjasd ahskdhakshjdkajshdkajsdahksdjajshdkjashkdhakshdkajhsdkjahskdjaskjdkajsdkajsdkajhsdkhaskdkaAAaaaaaaaaaaaaaaaaaaaaaaahbkdskhdajhdkjasdahskdhakshjdkajshdkajsdahksdjajshdkjashkdhakshdkajh sdkjahskdjaskjdkajsdkajsdkajhsdkhaskdkaAAaaaaaaaaaaaaaaaaaaaaaaahbkdskhdajhdkjasdahskdhakshjdkajshdkajsdahksdjajshdkjashkdhakshdkajhsdkjahskdjaskjdkajsdkajsdkajhsdkhaskdkaAAaaaa aaaaaaaaaaaaaaaaaaahbkdskhdajhdkjasdahskdhakshjdkajshdkajsdahksdjajshdkjashkdhakshdkajhsdkjahskdjaskjdkajs dkajsdkajhsdkhaskdkaAAaaaaaaaaaaaaaaaaaaaaaaahbkdskhdajhdkjasdahskdhakshjdkajshdkajsdahksdjajshdkjashkdhakshdkajhsdkjahskdjaskjdkaj "
-    }];
-    create_modal_rbi_table_POF(mockParsedData);
-    create_modal_rbi_table_RCM(mockDataRCM);
-        // $.ajax({
-        //     type: "GET",
-        //     url: "https://" + url_api + "/fmi/data/v2/databases/Pipeline/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_tag,
-        //     dataType: 'json',
-        //     headers: {
-        //         "Authorization": "Bearer " + _token_pipeline,
-        //         "Content-Type": "application/json"
-        //     },
-        //     async: false,
-        //     success: function (data) {
-        //         // console.log(JSON.parse(data.response.scriptResult));
-        //         // const filterData = filter_data(JSON.parse(data.response.scriptResult), sectionType);
-        //         console.log(data);
-        //         // create_nav(filterData);
-        //         // create_modal_rbi_table_POF(data);
-        //         // create_modal_rbi_table_COF(filterData);
-        //     },
-        //     error: function (error) {
-        //         console.log(error);
-        //         console.log(error.responseJSON.messages[0].code);
-        //         if(error.responseJSON.messages[0].code == 401) {
-        //             // no record match
-        //         } else {
-        //             get_token_pipeline();
-        //             _token_pipeline = $.cookie("_token_pipeline");
-        //             call_modal_rbi(o);
-        //         }
-        //     }
-        // });
+        $.ajax({
+            type: "GET",
+            url: "https://" + url_api + "/fmi/data/v2/databases/Structure/layouts/rbi_data/script/rbi_latest_by_id_tag?script.param=" + o.data.fieldData.id_tag,
+            dataType: 'json',
+            headers: {
+                "Authorization": "Bearer " + _token_structure,
+                "Content-Type": "application/json"
+            },
+            async: false,
+            success: function (data) {
+                create_modal_rbi_table_COF(JSON.parse(data.response.scriptResult));
+                create_modal_rbi_table_POF(mockParsedData);
+                create_modal_rbi_table_RCM(mockDataRCM);
+                create_modal_rbi_table_more();
+            },
+            error: function (error) {
+                console.log(error);
+                console.log(error.responseJSON.messages[0].code);
+                if(error.responseJSON.messages[0].code == 401) {
+                    // no record match
+                } else {
+                    get_token_structure();
+                    _token_structure = $.cookie("_token_structure");
+                    call_modal_rbi(o);
+                }
+            }
+        });
+        
         $('#rbi_modal').modal('show');
     }
     function get_inspection_history(id_tag,tag_no) {
