@@ -1724,7 +1724,7 @@
         parsedData.forEach(item => {
             const secName = item.section_name;
             const secNo = item.section_no;
-            const nameNav = `Section No. ${secNo} | ${secName}`;
+            const nameNav = `${secNo} : ${secName}`;
             if (!sectionNameDict[nameNav]) {
                 sectionNameDict[nameNav] = [];
             }
@@ -1761,8 +1761,8 @@
     }
 
     function select_section_name(parsedData, sectionName,){
-        listData = sectionName.split(" No.");
-        const selectData = parsedData.filter(item => item.section_name === listData[0] && item.section_no === listData[1]);
+        listData = sectionName.split(" : ");
+        const selectData = parsedData.filter(item => item.section_name === listData[1] && item.section_no === listData[0]);
         create_modal_rbi_table_POF(selectData);
         create_modal_rbi_table_COF(selectData);
     }
