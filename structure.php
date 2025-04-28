@@ -1662,7 +1662,7 @@
                 {
                     dataField: "fieldData.id_tag",
                     caption: "Info",
-                    width: "120",
+                    width: "150",
                     allowEditing: false,
                     alignment: "center",
                     cellTemplate: function (container, options) {
