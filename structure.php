@@ -990,8 +990,9 @@
         const cof_risk_detail = ["Consequential", "Risk of Life", "Risk of Environment", "Risk of Production", "Cost of Repair"];
 
         const rbiData = parsedData[0] || {};
-        console.log(rbiData);
+        const total = rbiData[`CoF_total`];
         containerCOF.innerHTML = "";
+        console.log(rbiData);
 
         const header1 = document.createElement("div");
         header1.className = "rbi-item-info-header rbi-span-40 rbi-purple border-inline-white";
@@ -1016,6 +1017,9 @@
         for (let i = 0; i <= 4; i++) {
             const risk_label = cof_risk_label[i];
             const risk_detail = cof_risk_detail[i];
+            const risk_value = rbiData[`CoF_risk_value_${risk_label.toLowerCase()}`];
+            const consequential_value = rbiData[`CoF_value_${risk_label.toLowerCase()}`];
+            const comment = rbiData[`CoF_note_${risk_label.toLowerCase()}`];
 
             const risk_label_div = document.createElement("div");
             risk_label_div.className = "rbi-item-info-context rbi-span-1 rbi-extra-lightgray";
@@ -1025,21 +1029,21 @@
             risk_detail_div.className = "rbi-item-info-context rbi-span-6 rbi-extra-lightgray";
             risk_detail_div.textContent = risk_detail;
 
-            const consequential_id_div = document.createElement("div");
-            consequential_id_div.className = "rbi-item-info-context rbi-span-13";
-            consequential_id_div.textContent = " ";
+            const risk_value_div = document.createElement("div");
+            risk_value_div.className = "rbi-item-info-context rbi-span-13";
+            risk_value_div.textContent = risk_value;
 
             const consequential_value_div = document.createElement("div");
             consequential_value_div.className = "rbi-item-info-context rbi-span-2";
-            consequential_value_div.textContent = " ";
+            consequential_value_div.textContent = consequential_value;
 
             const comment_div = document.createElement("div");
             comment_div.className = "rbi-item-info-context rbi-span-18";
-            comment_div.textContent = " ";
+            comment_div.textContent = comment;
 
             containerCOF.appendChild(risk_label_div);
             containerCOF.appendChild(risk_detail_div);
-            containerCOF.appendChild(consequential_id_div);
+            containerCOF.appendChild(risk_value_div);
             containerCOF.appendChild(consequential_value_div);
             containerCOF.appendChild(comment_div);
         }
@@ -1051,7 +1055,7 @@
 
         const total_div = document.createElement("div");
         total_div.className = "rbi-item-info-context rbi-span-2";
-        total_div.textContent = " ";
+        total_div.textContent = total;
         containerCOF.appendChild(total_div);
 
         const formulaText = document.createElement("div");
