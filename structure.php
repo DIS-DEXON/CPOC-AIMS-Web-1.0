@@ -1065,7 +1065,7 @@
             const comment = rbiData[`CoF_note_${risk_label.toLowerCase()}`];
 
             const risk_label_div = document.createElement("div");
-            risk_label_div.className = "rbi-item-info-context rbi-span-1 rbi-extra-lightgray";
+            risk_label_div.className = "rbi-item-info-context rbi-span-1 rbi-extra-lightgray text-to-center";
             risk_label_div.textContent = risk_label;
 
             const risk_detail_div = document.createElement("div");
@@ -1077,7 +1077,7 @@
             risk_value_div.textContent = risk_value;
 
             const consequential_value_div = document.createElement("div");
-            consequential_value_div.className = "rbi-item-info-context rbi-span-2";
+            consequential_value_div.className = "rbi-item-info-context rbi-span-2 text-to-center";
             consequential_value_div.textContent = consequential_value;
 
             const comment_div = document.createElement("div");
@@ -1092,17 +1092,17 @@
         }
 
         const totalText = document.createElement("div");
-        totalText.className = "rbi-item-info-context rbi-span-20 rbi-extra-lightgray";
+        totalText.className = "rbi-item-info-context rbi-span-20 rbi-extra-lightgray text-to-center";
         totalText.textContent = "Total";
         containerCOF.appendChild(totalText);
 
         const total_div = document.createElement("div");
-        total_div.className = "rbi-item-info-context rbi-span-2";
+        total_div.className = "rbi-item-info-context rbi-span-2 text-to-center";
         total_div.textContent = total;
         containerCOF.appendChild(total_div);
 
         const formulaText = document.createElement("div");
-        formulaText.className = "rbi-item-info-context rbi-span-18 rbi-extra-lightgray";
+        formulaText.className = "rbi-item-info-context rbi-span-18 rbi-extra-lightgray text-to-center";
         formulaText.textContent = "Y = G + H + I + J + K";
         containerCOF.appendChild(formulaText);
     }
@@ -1116,7 +1116,7 @@
 
         for (let i = 0; i < title.length; i++) {
             const title_div = document.createElement("div");
-            title_div.className = "rbi-item-info-header rbi-span-5 rbi-purple border-inline-white";
+            title_div.className = "rbi-item-info-header rbi-span-5 rbi-purple border-inline-white text-to-center";
             title_div.textContent = title[i];
             containerMore.appendChild(title_div);
         }
