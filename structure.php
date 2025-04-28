@@ -301,8 +301,9 @@
                 <ul class="nav nav-tabs" id="myTab" role="tablist"></ul>
                 <div class="rbi-grid-structure" id="rbi-container-POF"></div>
                 <div class="rbi-grid-structure" id="rbi-container-COF"></div>
-                <div class="rbi-grid-structure" id="rbi-container-RCM"></div>
                 <div class="rbi-grid-structure" id="rbi-container-MORE"></div>
+                <div class="rbi-grid-structure" id="rbi-container-RCM"></div>
+
             </div>
         </div>
     </div>
@@ -951,18 +952,16 @@
         header4.className = "rbi-item-info-header rbi-span-18 rbi-purple border-inline-white";
         header4.textContent = "Comment";
         containerPOF.appendChild(header4);
+        const totalPoF = rbiData[`PoF_total`] ?? "";
 
-        var totalValue = 0;
         const riskList = ["A","B","C","D","E","F"]
         const riskContextList = ["Fatique Analysis","Accidental Damage","Anomalies","Probability of corrosion","Confidence in Assessment","Utillzation Factor"]
         for (let i = 1; i <=riskList.length ; i++) {
             
-            const prop = rbiData[`PoF_risk_id_${riskList[i-1].toLowerCase()}`] ?? "";
+            const prop = rbiData[`PoF_risk_value_${riskList[i-1].toLowerCase()}`] ?? "";
             const value = rbiData[`PoF_value_${riskList[i-1].toLowerCase()}`] ?? "";
             const comment = rbiData[`PoF_note_${riskList[i-1].toLowerCase()}`] ?? "";
 
-            totalValue += value;
-            
             const riskLevelDiv = document.createElement("div");
             riskLevelDiv.className = "rbi-item-info-context rbi-span-1 text-to-center rbi-extra-lightgray";
             riskLevelDiv.textContent = riskList[i-1];
@@ -995,7 +994,7 @@
 
         const totalValueDiv = document.createElement("div");
         totalValueDiv.className = "rbi-item-info-context rbi-span-2 text-to-center";
-        totalValueDiv.textContent = totalValue;
+        totalValueDiv.textContent = totalPoF;
 
 
         const calDiv = document.createElement("div");
@@ -1104,10 +1103,10 @@
         containerCOF.appendChild(formulaText);
     }
 
-    function create_modal_rbi_table_more() {
+    function create_modal_rbi_table_more(parsedData) {
         const containerMore = document.getElementById("rbi-container-MORE");
         const title = ["System Factor S", "Criticality Ranking", "Criticality Ranking Criteria", "Inspection Priority", "Inspection Frequency", "Risk Level"];
-
+        const value = ["system_factor_S","criticality_ranking","criticality_ranking_criteria","inspection_priority_criteria","inspection_freq_criteria","risk_level"]
         // const rbiData = parsedData[0] || {};
         containerMore.innerHTML = "";
 
@@ -1120,8 +1119,8 @@
 
         for (let i = 0; i < title.length; i++) {
             const detail_div = document.createElement("div");
-            detail_div.className = "rbi-item-info-context rbi-span-5";
-            detail_div.textContent = " ";
+            detail_div.className = "rbi-item-info-context rbi-span-5 text-to-center";
+            detail_div.textContent = parsedData[0][value[i]];
             containerMore.appendChild(detail_div);
         }
     }
@@ -1138,9 +1137,9 @@
             async: false,
             success: function (data) {
                 create_modal_rbi_table_COF(JSON.parse(data.response.scriptResult));
-                create_modal_rbi_table_POF(mockParsedData);
-                create_modal_rbi_table_RCM(mockDataRCM);
-                create_modal_rbi_table_more();
+                create_modal_rbi_table_POF(JSON.parse(data.response.scriptResult));
+                create_modal_rbi_table_RCM(JSON.parse(data.response.scriptResult));
+                create_modal_rbi_table_more(JSON.parse(data.response.scriptResult));
             },
             error: function (error) {
                 console.log(error);
