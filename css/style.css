@@ -616,6 +616,14 @@ textarea {
     border-top: 1px solid black;
     border-right: 1px solid black;
 }
+.rbi-grid-structure{
+    font-size: 14px;
+    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+}
 .rbi-ul {
     margin: 0;
     text-align: start;
@@ -674,18 +682,43 @@ textarea {
 .rbi-span-3 {
     grid-column: span 3;
     /* min-height: 50px; */
-
 }
 .rbi-span-4 {
     grid-column: span 4;
-    /* min-height: 50px; */
 }
+
 .rbi-span-5 {
     grid-column: span 5;
+}
+.rbi-span-6 {
+    grid-column: span 6;
+}
+.rbi-span-7 {
+    grid-column: span 7;
+}
+.rbi-span-8 {
+    grid-column: span 8;
 }
 .rbi-span-10 {
     grid-column: span 10;
 }
+.rbi-span-13 {
+    grid-column: span 13;
+}
+.rbi-span-15 {
+    grid-column: span 15;
+}
+
+.rbi-span-18 {
+    grid-column: span 18;
+}
+.rbi-span-20 {
+    grid-column: span 20;
+}
+.rbi-span-40 {
+    grid-column: span 40;
+}
+
 .rbi-row-span-2 {
     grid-row: span 2;
 }
@@ -720,7 +753,12 @@ textarea {
     border-bottom: 1px solid black;
     min-height: 55px;
 }
-
+.text-to-center{
+    display: flex;
+    justify-content: center;  
+    align-items: center;      
+      
+}
 
 .rbi-header {
     font-size: 22px;
@@ -730,4 +768,8 @@ textarea {
 .rbi-header-text {
     font-weight: 900;
     margin-right: 15px;
+}
+#rbi-container-POF-40{
+    display: grid;
+    grid-template-columns: repeat(40, 1fr); 
 }
