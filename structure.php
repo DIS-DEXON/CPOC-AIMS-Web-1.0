@@ -925,14 +925,13 @@
     }
 
     function create_modal_rbi_table_POF(parsedData) {
-        console.log(parsedData);
         const containerPOF = document.getElementById("rbi-container-POF");
         const rbiData = parsedData[0] || {}; 
         // const rbiDate = Object.keys(rbiData).length === 0 ? '' : moment(rbiData.rbi_date).format('DD MMM YYYY');
         // $('#rbi_date').html(rbiDate);
         // $('#rbi_date').html(rbiDate);
         containerPOF.innerHTML = "";
-        console.log(rbiData)
+
         const header1 = document.createElement("div");
         header1.className = "rbi-item-info-header rbi-span-40 rbi-purple border-inline-white";
         header1.textContent = "POF | PROBABILITY OF FAILURE";
@@ -988,9 +987,9 @@
             containerPOF.appendChild(valueDiv);
             containerPOF.appendChild(commentDiv);
         }
-        const totaltextDiv = document.createElement("div");
-        totaltextDiv.className = "rbi-item-info-context rbi-span-20 text-to-center rbi-extra-lightgray";
-        totaltextDiv.textContent = "Total";
+        const totalTextDiv = document.createElement("div");
+        totalTextDiv.className = "rbi-item-info-context rbi-span-20 text-to-center rbi-extra-lightgray";
+        totalTextDiv.textContent = "Total";
 
         const totalValueDiv = document.createElement("div");
         totalValueDiv.className = "rbi-item-info-context rbi-span-2 text-to-center";
@@ -999,9 +998,9 @@
 
         const calDiv = document.createElement("div");
         calDiv.className = "rbi-item-info-context rbi-span-18 text-to-center rbi-extra-lightgray";
-        calDiv.textContent = "X=A+B+C+D+E+F";
+        calDiv.textContent = "X = A + B + C + D + E + F";
 
-        containerPOF.appendChild(totaltextDiv);
+        containerPOF.appendChild(totalTextDiv);
         containerPOF.appendChild(totalValueDiv);
         containerPOF.appendChild(calDiv);
 
@@ -1013,7 +1012,6 @@
         const comment = rbiData["recommendation"] ?? "";
 
         containerRCM.innerHTML = "";
-
 
         const header1 = document.createElement("div");
         header1.className = "rbi-item-info-header rbi-span-10 rbi-purple border-inline-white";
@@ -1035,7 +1033,6 @@
         const rbiData = parsedData[0] || {};
         const total = rbiData[`CoF_total`];
         containerCOF.innerHTML = "";
-        console.log(rbiData);
 
         const header1 = document.createElement("div");
         header1.className = "rbi-item-info-header rbi-span-40 rbi-purple border-inline-white";
@@ -1111,7 +1108,7 @@
         const containerMore = document.getElementById("rbi-container-MORE");
         const title = ["System Factor S", "Criticality Ranking", "Criticality Ranking Criteria", "Inspection Priority", "Inspection Frequency", "Risk Level"];
         const value = ["system_factor_S","criticality_ranking","criticality_ranking_criteria","inspection_priority_criteria","inspection_freq_criteria","risk_level"]
-        // const rbiData = parsedData[0] || {};
+        const rbiData = parsedData[0] || {};
         containerMore.innerHTML = "";
 
         for (let i = 0; i < title.length; i++) {
@@ -1124,7 +1121,7 @@
         for (let i = 0; i < title.length; i++) {
             const detail_div = document.createElement("div");
             detail_div.className = "rbi-item-info-context rbi-span-5 text-to-center";
-            detail_div.textContent = parsedData[0][value[i]];
+            detail_div.textContent = rbiData[value[i]];
             containerMore.appendChild(detail_div);
         }
     }
