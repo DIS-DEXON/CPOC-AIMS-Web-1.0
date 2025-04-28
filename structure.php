@@ -299,8 +299,8 @@
             </div>
             <div class="modal-body">
                 <ul class="nav nav-tabs" id="myTab" role="tablist"></ul>
-                <div class="rbi-grid-structure" id="rbi-container-POF"></div>
-                <div class="rbi-grid-structure" id="rbi-container-COF"></div>
+                <div class="rbi-grid-structure" id="rbi-container-POF-structure"></div>
+                <div class="rbi-grid-structure" id="rbi-container-COF-structure"></div>
                 <div class="rbi-grid-structure" id="rbi-container-MORE"></div>
                 <div class="rbi-grid-structure" id="rbi-container-RCM"></div>
 
@@ -925,7 +925,7 @@
     }
 
     function create_modal_rbi_table_POF(parsedData) {
-        const containerPOF = document.getElementById("rbi-container-POF");
+        const containerPOF = document.getElementById("rbi-container-POF-structure");
         const rbiData = parsedData[0] || {}; 
         // const rbiDate = Object.keys(rbiData).length === 0 ? '' : moment(rbiData.rbi_date).format('DD MMM YYYY');
         // $('#rbi_date').html(rbiDate);
@@ -966,11 +966,11 @@
             riskLevelDiv.textContent = riskList[i-1];
 
             const riskContextDiv = document.createElement("div");
-            riskContextDiv.className = "rbi-item-info-context rbi-span-6 rbi-extra-lightgray";
+            riskContextDiv.className = "rbi-item-info-context rbi-span-6 rbi-extra-lightgray text-left-center";
             riskContextDiv.textContent = riskContextList[i-1];
 
             const propDiv = document.createElement("div");
-            propDiv.className = "rbi-item-info-context rbi-span-13";
+            propDiv.className = "rbi-item-info-context rbi-span-13 text-left-center";
             propDiv.textContent = prop;
 
             const valueDiv = document.createElement("div");
@@ -978,7 +978,7 @@
             valueDiv.textContent = value;
 
             const commentDiv = document.createElement("div");
-            commentDiv.className = "rbi-item-info-context rbi-span-18";
+            commentDiv.className = "rbi-item-info-context rbi-span-18 text-left-center";
             commentDiv.textContent = comment;
 
             containerPOF.appendChild(riskLevelDiv);
@@ -1026,7 +1026,7 @@
     }
 
     function create_modal_rbi_table_COF(parsedData) {
-        const containerCOF = document.getElementById("rbi-container-COF");
+        const containerCOF = document.getElementById("rbi-container-COF-structure");
         const cof_risk_label = ["G", "H", "I", "J", "K"];
         const cof_risk_detail = ["Consequential", "Risk of Life", "Risk of Environment", "Risk of Production", "Cost of Repair"];
 
@@ -1066,11 +1066,11 @@
             risk_label_div.textContent = risk_label;
 
             const risk_detail_div = document.createElement("div");
-            risk_detail_div.className = "rbi-item-info-context rbi-span-6 rbi-extra-lightgray";
+            risk_detail_div.className = "rbi-item-info-context rbi-span-6 rbi-extra-lightgray text-left-center";
             risk_detail_div.textContent = risk_detail;
 
             const risk_value_div = document.createElement("div");
-            risk_value_div.className = "rbi-item-info-context rbi-span-13";
+            risk_value_div.className = "rbi-item-info-context rbi-span-13 text-left-center";
             risk_value_div.textContent = risk_value;
 
             const consequential_value_div = document.createElement("div");
@@ -1078,7 +1078,7 @@
             consequential_value_div.textContent = consequential_value;
 
             const comment_div = document.createElement("div");
-            comment_div.className = "rbi-item-info-context rbi-span-18";
+            comment_div.className = "rbi-item-info-context rbi-span-18 text-left-center";
             comment_div.textContent = comment;
 
             containerCOF.appendChild(risk_label_div);
@@ -1107,7 +1107,7 @@
     function create_modal_rbi_table_more(parsedData) {
         const containerMore = document.getElementById("rbi-container-MORE");
         const title = ["System Factor S", "Criticality Ranking", "Criticality Ranking Criteria", "Inspection Priority", "Inspection Frequency", "Risk Level"];
-        const value = ["system_factor_S","criticality_ranking","criticality_ranking_criteria","inspection_priority_criteria","inspection_freq_criteria","risk_level"]
+        const value = ["system_factor_S","criticality_ranking","criticality_ranking_criteria","inspection_priority_criteria","inspection_freq_criteria"]
         const rbiData = parsedData[0] || {};
         containerMore.innerHTML = "";
 
@@ -1117,13 +1117,44 @@
             title_div.textContent = title[i];
             containerMore.appendChild(title_div);
         }
-
-        for (let i = 0; i < title.length; i++) {
+        for (let i = 0; i < title.length-1; i++) {
             const detail_div = document.createElement("div");
             detail_div.className = "rbi-item-info-context rbi-span-5 text-to-center";
             detail_div.textContent = rbiData[value[i]];
             containerMore.appendChild(detail_div);
         }
+        // Low: 66FF33
+        // Medium: FFFF00
+        // Medium High: FFCC00
+        // High: F69546
+        // Very High: FF0000
+        var risk_level = rbiData["risk_level"]
+        var colorRiskLevel ;
+        switch (risk_level) {
+            case "Very High":
+                colorRiskLevel = "#FF0000"; 
+                break;
+            case "High":
+                colorRiskLevel = "#F69546"; 
+                break;
+            
+            case "Medium High":
+                colorRiskLevel = "#FFCC00"; 
+                break;
+            case "Medium":
+                colorRiskLevel = "#FFFF00"; 
+                break;
+            case "Low":
+                colorRiskLevel = "#66FF33"; 
+                break;
+            default:
+                colorRiskLevel = "#66FF33"; 
+        }
+        const riskLevelDiv = document.createElement("div");
+        riskLevelDiv.className = "rbi-item-info-context rbi-span-5 text-to-center";
+        riskLevelDiv.textContent = risk_level;
+        containerMore.appendChild(riskLevelDiv);
+        riskLevelDiv.style.backgroundColor = colorRiskLevel;
     }
 
     function call_modal_rbi(o) {

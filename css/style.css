@@ -759,9 +759,11 @@ textarea {
     display: flex;
     justify-content: center;  
     align-items: center;      
-      
 }
+.text-left-center{
+    align-items: center;      
 
+}
 .rbi-header {
     font-size: 22px;
     margin-bottom: 12px;
@@ -771,11 +773,11 @@ textarea {
     font-weight: 900;
     margin-right: 15px;
 }
-#rbi-container-POF{
+#rbi-container-POF-structure{
     display: grid;
     grid-template-columns: repeat(40, 1fr); 
 }
-#rbi-container-COF {
+#rbi-container-COF-structure {
     display: grid;
     grid-template-columns: repeat(40, 1fr);
 }
